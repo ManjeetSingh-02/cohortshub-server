@@ -1,6 +1,6 @@
 // import local modules
 import { envConfig } from './utils/env.js';
-import { healthCheckRouter } from './api/routers.api.js';
+import { healthCheckRouter, cohortRouter } from './api/routers.api.js';
 
 // import external modules
 import express from 'express';
@@ -35,6 +35,7 @@ app.use(express.static('public'));
 
 // middlewares for handling API routes
 app.use('/api/v1/healthcheck', healthCheckRouter);
+app.use('/api/v1/cohort', cohortRouter);
 
 // export app
 export default app;
