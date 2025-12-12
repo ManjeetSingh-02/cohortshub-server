@@ -11,13 +11,14 @@ export const GOOGLE_OAUTH_CONFIG = {
 };
 
 // google OAuth Cookie constants
-export const COOKIE_CONFIG = {
+export const OAUTH_COOKIE_CONFIG = {
   STATE_NAME: 'oauthState',
   NONCE_NAME: 'oauthNonce',
   OPTIONS: {
     httpOnly: true,
     secure: envConfig.NODE_ENV === 'production',
     signed: true,
+    sameSite: 'Lax',
     maxAge: 5 * 60 * 1000,
   },
 };

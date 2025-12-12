@@ -1,6 +1,6 @@
 // import local modules
 import { envConfig } from '../../../utils/env.js';
-import { GOOGLE_OAUTH_CONFIG, COOKIE_CONFIG } from '../../../utils/constants.js';
+import { GOOGLE_OAUTH_CONFIG, OAUTH_COOKIE_CONFIG } from '../../../utils/constants.js';
 import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIError } from '../../error.api.js';
 import { APIResponse } from '../../response.api.js';
@@ -28,22 +28,22 @@ export const googleLogin = asyncHandler(async (req, res) => {
   const authNonce = generateTemporaryToken(16);
 
   // store state and nonce in cookies
-  res.cookie(COOKIE_CONFIG.STATE_NAME, authState, COOKIE_CONFIG.OPTIONS);
-  res.cookie(COOKIE_CONFIG.NONCE_NAME, authNonce, COOKIE_CONFIG.OPTIONS);
+  res.cookie(OAUTH_COOKIE_CONFIG.STATE_NAME, authState, OAUTH_COOKIE_CONFIG.OPTIONS);
+  res.cookie(OAUTH_COOKIE_CONFIG.NONCE_NAME, authNonce, OAUTH_COOKIE_CONFIG.OPTIONS);
 
   // redirect user to Google's OAuth2 consent page
   return res.redirect(
-    `${GOOGLE_OAUTH_CONFIG.AUTH_URI}?client_id=${envConfig.GOOGLE_CLIENT_ID}&redirect_uri=${envConfig.GOOGLE_REDIRECT_URI}&response_type=code&scope=${encodeURIComponent(GOOGLE_OAUTH_CONFIG.DEFAULT_SCOPES)}&access_type=offline&prompt=consent&state=${authState}&nonce=${authNonce}`
+    `${GOOGLE_OAUTH_CONFIG.AUTH_URI}?client_id=${envConfig.GOOGLE_CLIENT_ID}&redirect_uri=${envConfig.GOOGLE_REDIRECT_URI}&response_type=code&scope=${encodeURIComponent(GOOGLE_OAUTH_CONFIG.DEFAULT_SCOPES)}&prompt=consent&state=${authState}&nonce=${authNonce}`
   );
 });
 
 // @controller GET /google/callback
 export const googleLoginCallback = asyncHandler(async (req, res) => {
   // STATE VERIFICATION (CSRF PROTECTION)
-  if (!req.query.state || req.query.state !== req.signedCookies[COOKIE_CONFIG.STATE_NAME]) {
+  if (!req.query.state || req.query.state !== req.signedCookies[OAUTH_COOKIE_CONFIG.STATE_NAME]) {
     // clear cookies
-    res.clearCookie(COOKIE_CONFIG.STATE_NAME);
-    res.clearCookie(COOKIE_CONFIG.NONCE_NAME);
+    res.clearCookie(OAUTH_COOKIE_CONFIG.STATE_NAME);
+    res.clearCookie(OAUTH_COOKIE_CONFIG.NONCE_NAME);
 
     // throw error for invalid oauthState
     throw new APIError(400, {
@@ -53,13 +53,13 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   }
 
   // clear oauthState cookie as it's already verified
-  res.clearCookie(COOKIE_CONFIG.STATE_NAME);
+  res.clearCookie(OAUTH_COOKIE_CONFIG.STATE_NAME);
 
   // get tokens by exchanging authorization code
   const { tokens } = await OAuth2ClientInstance.getToken(req.query.code);
   if (!tokens || !tokens.id_token) {
     // clear oauthNonce cookie
-    res.clearCookie(COOKIE_CONFIG.NONCE_NAME);
+    res.clearCookie(OAUTH_COOKIE_CONFIG.NONCE_NAME);
 
     // throw error for token fetch failure
     throw new APIError(500, {
@@ -69,9 +69,9 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   }
 
   // check oauthNonce cookie existence
-  if (!req.signedCookies[COOKIE_CONFIG.NONCE_NAME]) {
+  if (!req.signedCookies[OAUTH_COOKIE_CONFIG.NONCE_NAME]) {
     // clear oauthNonce cookie
-    res.clearCookie(COOKIE_CONFIG.NONCE_NAME);
+    res.clearCookie(OAUTH_COOKIE_CONFIG.NONCE_NAME);
 
     // throw error for missing oauthNonce
     throw new APIError(400, {
@@ -84,11 +84,11 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   const ticket = await OAuth2ClientInstance.verifyIdToken({
     idToken: tokens.id_token,
     audience: envConfig.GOOGLE_CLIENT_ID,
-    nonce: req.signedCookies[COOKIE_CONFIG.NONCE_NAME],
+    nonce: req.signedCookies[OAUTH_COOKIE_CONFIG.NONCE_NAME],
   });
 
   // clear oauthNonce cookie as it's already verified
-  res.clearCookie(COOKIE_CONFIG.NONCE_NAME);
+  res.clearCookie(OAUTH_COOKIE_CONFIG.NONCE_NAME);
 
   // send success status to user
   return res.status(200).json(
