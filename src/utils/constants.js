@@ -35,7 +35,7 @@ export const REFRESH_TOKEN_COOKIE_CONFIG = {
   OPTIONS: {
     httpOnly: true,
     secure: envConfig.NODE_ENV === 'production',
-    sameSite: 'None',
+    sameSite: envConfig.NODE_ENV === 'production' ? 'None' : 'Lax',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
 };
