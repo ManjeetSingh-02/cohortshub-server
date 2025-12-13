@@ -5,6 +5,7 @@ import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
 } from '../utils/constants.js';
+import { envConfig } from '../utils/env.js';
 
 // import external modules
 import mongoose from 'mongoose';
