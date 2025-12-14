@@ -27,7 +27,7 @@ function generateTemporaryToken(length) {
 }
 
 // @controller GET /google
-export const googleLogin = asyncHandler(async (req, res) => {
+export const googleLogin = asyncHandler(async (_, res) => {
   // generate state and nonce for OAuth2
   const authState = generateTemporaryToken(16);
   const authNonce = generateTemporaryToken(16);
@@ -38,7 +38,7 @@ export const googleLogin = asyncHandler(async (req, res) => {
 
   // redirect user to Google's OAuth2 consent page
   return res.redirect(
-    `${GOOGLE_OAUTH_CONFIG.AUTH_URI}?client_id=${envConfig.GOOGLE_CLIENT_ID}&redirect_uri=${envConfig.GOOGLE_REDIRECT_URI}&response_type=code&scope=${encodeURIComponent(GOOGLE_OAUTH_CONFIG.DEFAULT_SCOPES)}&prompt=consent&state=${authState}&nonce=${authNonce}`
+    `${GOOGLE_OAUTH_CONFIG.AUTH_URI}?client_id=${envConfig.GOOGLE_CLIENT_ID}&redirect_uri=${envConfig.GOOGLE_REDIRECT_URI}&response_type=code&scope=${encodeURIComponent(GOOGLE_OAUTH_CONFIG.DEFAULT_SCOPES)}&prompt=select_account&state=${authState}&nonce=${authNonce}`
   );
 });
 
