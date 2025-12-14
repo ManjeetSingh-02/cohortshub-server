@@ -32,6 +32,10 @@ async function getAdminUserEmailFromCLI() {
     // check if any admin user already exists
     const existingAdminUsers = await User.find({ role: USER_ROLES.ADMIN });
 
+    // if admin user exists with same email, throw error
+    if (existingAdminUsers.find(user => user.email === email))
+      throw new Error('Admin User with this email already exists');
+
     // create adminUser with provided email
     const adminUser = await User.create({
       email,
@@ -49,8 +53,8 @@ async function getAdminUserEmailFromCLI() {
     // log error
     console.error('---------------------------------------------------------');
     console.error('ERROR DURING SYSTEM ADMIN INITIALIZATION');
-    console.error('RUN SYSTEM ADMIN INITIALIZATION SCRIPT AGAIN');
     console.error(`ERROR DETAILS: ${error.message}`);
+    console.error('RUN SYSTEM ADMIN INITIALIZATION SCRIPT AGAIN');
     console.error('---------------------------------------------------------');
 
     // clean database to maintain consistency
