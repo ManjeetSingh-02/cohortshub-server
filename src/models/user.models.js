@@ -11,6 +11,11 @@ import { envConfig } from '../utils/env.js';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 
+// helper function to check if user is admin for conditional required fields
+function isFieldRequired() {
+  return this.role !== USER_ROLES.ADMIN;
+}
+
 // schema for skill
 const skillSchema = new mongoose.Schema(
   {
@@ -55,7 +60,7 @@ const userSchema = new mongoose.Schema(
   {
     googleID: {
       type: String,
-      required: true,
+      required: isFieldRequired,
       unique: true,
       trim: true,
     },
@@ -109,7 +114,7 @@ const userSchema = new mongoose.Schema(
           ref: 'Cohort',
         },
       ],
-      required: true,
+      required: isFieldRequired,
     },
     auditLogs: {
       type: [
