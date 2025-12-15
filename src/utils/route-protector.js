@@ -53,6 +53,7 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
   req.user = {
     id: loggedInUser._id,
     email: loggedInUser.email,
+    role: loggedInUser.role,
   };
 
   // forward request to next middleware
@@ -71,6 +72,20 @@ export const isSessionActive = asyncHandler(async (req, _, next) => {
   // forward request to next middleware
   next();
 });
+
+// function for checking if user has required role
+export const hasRequiredRole = roles =>
+  asyncHandler(async (req, _, next) => {
+    // check if user doesn't have any one of the required roles
+    if (!roles.includes(req.user.role))
+      throw new APIError(403, {
+        type: 'Authorization Error',
+        message: 'Access denied, insufficient permissions',
+      });
+
+    // forward request to next middleware
+    next();
+  });
 
 // sub-function to decode access token
 function decodeAccessToken(accessToken) {
