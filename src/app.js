@@ -30,9 +30,6 @@ app.use(express.json());
 // middleware for handling URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 
-// middleware for serving static files
-app.use(express.static('public'));
-
 // middlewares for handling API routes
 app.use('/api/v1/healthcheck', healthCheckRouter);
 app.use('/api/v1/cohort', cohortRouter);
