@@ -44,7 +44,7 @@ export async function handleGoogleLogin(userDetails) {
     googleID: userDetails.googleID,
     fullName: userDetails.fullName,
     email: userDetails.email,
-    username: userDetails.email.split('@')[0].slice(0, 15),
+    username: `${userDetails.email.split('@')[0].slice(0, 10)}${generateRandomSuffix()}`,
     enrolledCohorts: allowedCohorts.map(cohort => cohort._id),
   });
   if (!newUser)
@@ -69,4 +69,11 @@ async function generateTokens(user) {
 
   // return access and refresh tokens
   return { accessToken, refreshToken };
+}
+
+// sub-function to generate a random suffix for username
+function generateRandomSuffix() {
+  return Math.floor(Math.random() * 65536)
+    .toString(16)
+    .padStart(4, '0');
 }
