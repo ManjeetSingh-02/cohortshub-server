@@ -7,10 +7,10 @@ import mongoose from 'mongoose';
 import * as readline from 'node:readline/promises';
 import { stdin as input, stdout as output } from 'node:process';
 
-async function getAdminUserEmailFromCLI() {
+async function getSystemAdminUserEmailFromCLI() {
   // create readline interface to read email and close it
   const rl = readline.createInterface({ input, output });
-  const email = await rl.question('--- Enter Admin User Email: ');
+  const email = await rl.question('--- Enter System Admin User Email: ');
   rl.close();
 
   // check for empty email
@@ -26,25 +26,25 @@ async function getAdminUserEmailFromCLI() {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('--- Database Connection: ✅');
 
-    // get adminUserEmail from CLI
-    const email = await getAdminUserEmailFromCLI();
+    // get systemAdminUserEmail from CLI
+    const email = await getSystemAdminUserEmailFromCLI();
 
-    // check if any admin user already exists
-    const existingAdminUsers = await User.find({ role: USER_ROLES.ADMIN });
+    // check if any system_admin user already exists
+    const existingSystemAdminUsers = await User.find({ role: USER_ROLES.SYSTEM_ADMIN });
 
-    // if admin user exists with same email, throw error
-    if (existingAdminUsers.find(user => user.email === email))
-      throw new Error('Admin User with this email already exists');
+    // if system_admin user exists with same email, throw error
+    if (existingSystemAdminUsers.find(user => user.email === email))
+      throw new Error('System_Admin User with this email already exists');
 
-    // create adminUser with provided email
-    const adminUser = await User.create({
+    // create systemAdminUser with provided email
+    const systemAdminUser = await User.create({
       email,
-      fullName: `System Admin ${existingAdminUsers.length + 1}`,
-      role: USER_ROLES.ADMIN,
-      username: `system_admin_${existingAdminUsers.length + 1}`,
+      fullName: `System Admin ${existingSystemAdminUsers.length + 1}`,
+      role: USER_ROLES.SYSTEM_ADMIN,
+      username: `system_admin_${existingSystemAdminUsers.length + 1}`,
     });
-    if (!adminUser) throw new Error('Something went wrong while creating Admin User');
-    console.log('--- Admin User Created Successfully: ✅');
+    if (!systemAdminUser) throw new Error('Something went wrong while creating System_Admin User');
+    console.log('--- System_Admin User Created Successfully: ✅');
 
     // disconnect from database
     await mongoose.disconnect();
