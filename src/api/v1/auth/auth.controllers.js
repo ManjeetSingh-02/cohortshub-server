@@ -9,6 +9,7 @@ import { asyncHandler } from '../../../utils/async-handler.js';
 import { handleGoogleLogin } from '../../../utils/google-auth.js';
 import { APIError } from '../../error.api.js';
 import { APIResponse } from '../../response.api.js';
+import { User } from '../../../models/index.js';
 
 // import external modules
 import crypto from 'crypto';
@@ -127,4 +128,22 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
         data: { accessToken },
       })
     );
+});
+
+// @controller GET /logout
+export const googleLogout = asyncHandler(async (req, res) => {
+  // get user from db and set refreshToken to null
+  await User.findByIdAndUpdate(req.user.id, {
+    refreshToken: null,
+  });
+
+  // set req.user to null
+  req.user = null;
+
+  // success status to user
+  // clear refreshToken cookie
+  return res
+    .status(200)
+    .clearCookie(REFRESH_TOKEN_COOKIE_CONFIG.NAME, REFRESH_TOKEN_COOKIE_CONFIG.OPTIONS)
+    .json(new APIResponse(200, { message: 'Logout Successful' }));
 });
