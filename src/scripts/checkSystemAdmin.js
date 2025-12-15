@@ -27,10 +27,6 @@ import mongoose from 'mongoose';
     console.error('RUN SYSTEM ADMIN INITIALIZATION SCRIPT AGAIN');
     console.error('---------------------------------------------------------');
 
-    // clean database to maintain consistency
-    await User.deleteMany({});
-    console.log('--- Database Cleanup: ✅');
-
     // disconnect from database
     await mongoose.disconnect();
     console.log('--- Database Disconnected: ✅');
