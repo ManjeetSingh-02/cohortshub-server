@@ -1,5 +1,6 @@
 // import local modules
-import { validateSchema } from '../../../utils/route-protector.js';
+import { USER_ROLES } from '../../../utils/constants.js';
+import { hasRequiredRole, isLoggedIn, validateSchema } from '../../../utils/route-protector.js';
 import { createCohort } from './cohort.controllers.js';
 import { createCohortSchema } from './cohort.zodschemas.js';
 
@@ -10,7 +11,13 @@ import { Router } from 'express';
 const router = Router();
 
 // @route POST /
-router.post('/', validateSchema(createCohortSchema), createCohort);
+router.post(
+  '/',
+  isLoggedIn,
+  hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  validateSchema(createCohortSchema),
+  createCohort
+);
 
 // export router
 export default router;
