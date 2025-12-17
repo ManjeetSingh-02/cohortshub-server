@@ -49,3 +49,11 @@ export const USER_ROLES = {
 
 // all userRoles array
 export const availableUserRoles = Object.values(USER_ROLES);
+
+// CSV Upload Config
+export const CSV_UPLOAD_CONFIG = {
+  MAX_FILE_SIZE: 5 * 1024 * 1024, // 5 MB
+  ALLOWED_MIME_TYPE: 'text/csv',
+  FIELD_NAME: 'csvFiles',
+  FIELD_MAX_COUNT: 1,
+};

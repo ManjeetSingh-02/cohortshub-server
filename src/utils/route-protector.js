@@ -12,7 +12,12 @@ import jwt from 'jsonwebtoken';
 export const validateSchema = zodSchema =>
   asyncHandler(async (req, _, next) => {
     // get validation result by parsing the request-body with the given zod-schema
-    const validationResult = zodSchema.safeParse(req.body);
+    const validationResult = zodSchema.safeParse({
+      body: req.body,
+      query: req.query,
+      params: req.params,
+      files: req.files,
+    });
 
     // if validation fails, throw an error
     if (!validationResult.success)
