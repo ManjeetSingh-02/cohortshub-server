@@ -81,7 +81,9 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
   const decodedToken = decodeAccessToken(authorizationHeaders.split(' ')[1]);
 
   // check if user exists
-  const loggedInUser = await User.findById(decodedToken?.id);
+  const loggedInUser = await User.findById(decodedToken?.id).select(
+    '_id email role currentGroup enrolledCohorts'
+  );
   if (!loggedInUser)
     throw new APIError(401, {
       type: 'Authentication Error',
@@ -89,11 +91,7 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
     });
 
   // set user in request object
-  req.user = {
-    id: loggedInUser._id,
-    email: loggedInUser.email,
-    role: loggedInUser.role,
-  };
+  req.user = loggedInUser;
 
   // forward request to next middleware
   next();
