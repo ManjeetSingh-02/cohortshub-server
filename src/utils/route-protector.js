@@ -12,7 +12,7 @@ import jwt from 'jsonwebtoken';
 export const isCohortValid = asyncHandler(async (req, _, next) => {
   // get cohort from db
   const existingCohort = await Cohort.findOne({ cohortName: req.params.cohortName }).select(
-    '_id allowedUserEmails'
+    '_id cohortName cohortDescription createdBy associatedGroups allowedUserEmails'
   );
 
   // if cohort doesn't exist, throw an error
