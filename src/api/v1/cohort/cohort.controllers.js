@@ -157,3 +157,33 @@ export const removeUserFromCohort = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// @controller PATCH /:cohortName/description
+export const updateCohortDescription = asyncHandler(async (req, res) => {
+  // update cohort description in db
+  const updatedCohort = await Cohort.updateOne(
+    { cohortName: req.params.cohortName },
+    { cohortDescription: req.body.cohortDescription }
+  );
+
+  // check if cohort was found
+  if (updatedCohort.matchedCount === 0)
+    throw new APIError(404, {
+      type: 'Update Cohort Description Error',
+      message: 'Cohort not found',
+    });
+
+  // check if cohort was updated
+  if (updatedCohort.modifiedCount === 0)
+    throw new APIError(409, {
+      type: 'Update Cohort Description Error',
+      message: 'Something went wrong while updating the cohort description',
+    });
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'Cohort description updated successfully',
+    })
+  );
+});

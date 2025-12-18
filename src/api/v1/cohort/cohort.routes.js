@@ -7,12 +7,14 @@ import {
   getAllCohorts,
   processCSVandAddUsersToCohort,
   removeUserFromCohort,
+  updateCohortDescription,
 } from './cohort.controllers.js';
 import {
   addUserToCohortSchema,
   createCohortSchema,
   processCSVandAddUsersToCohortSchema,
   removeUserFromCohortSchema,
+  updateCohortDescriptionSchema,
 } from './cohort.zodschemas.js';
 import { uploadCSVFiles } from '../../../utils/process-csv.js';
 
@@ -33,6 +35,15 @@ router.post(
 
 // @route GET /
 router.get('/', isLoggedIn, getAllCohorts);
+
+// @route PATCH /:cohortName/description
+router.patch(
+  '/:cohortName/description',
+  isLoggedIn,
+  hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  validateSchema(updateCohortDescriptionSchema),
+  updateCohortDescription
+);
 
 // @route PATCH /:cohortName/process-csv
 router.patch(
