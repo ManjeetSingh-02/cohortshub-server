@@ -8,7 +8,7 @@ import { User } from '../../../models/index.js';
 export const getAllUsers = asyncHandler(async (_, res) => {
   // fetch all users from the database
   const existingUsers = await User.find({})
-    .select('_id googleID fullName email username role currentGroup enrolledCohorts')
+    .select('_id googleID email username role currentGroup enrolledCohorts')
     .populate('currentGroup', 'groupName')
     .populate('enrolledCohorts', 'cohortName');
 
@@ -25,7 +25,7 @@ export const getAllUsers = asyncHandler(async (_, res) => {
 export const getUser = asyncHandler(async (req, res) => {
   // fetch user from db
   const existingUser = await User.findOne({ username: req.params.username })
-    .select('_id googleID fullName email username role currentGroup enrolledCohorts')
+    .select('_id googleID email username role currentGroup enrolledCohorts')
     .populate('currentGroup', 'groupName')
     .populate('enrolledCohorts', 'cohortName');
   if (!existingUser)

@@ -42,7 +42,6 @@ export async function handleGoogleLogin(userDetails) {
   // create a new user in db
   const newUser = await User.create({
     googleID: userDetails.googleID,
-    fullName: userDetails.fullName,
     email: userDetails.email,
     username: `${userDetails.email.split('@')[0].slice(0, 10)}${generateRandomSuffix()}`,
     enrolledCohorts: allowedCohorts.map(cohort => cohort._id),

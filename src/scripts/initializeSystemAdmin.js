@@ -38,7 +38,6 @@ async function getSystemAdminUserEmailFromCLI() {
     // create systemAdminUser with provided email
     const systemAdminUser = await User.create({
       email,
-      fullName: `System Admin`,
       role: USER_ROLES.SYSTEM_ADMIN,
       username: `system_admin`,
     });

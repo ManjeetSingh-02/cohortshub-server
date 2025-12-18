@@ -109,7 +109,6 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   // extract user info from ticket payload
   const userDetails = {
     googleID: String(ticketPayload.sub),
-    fullName: String(ticketPayload.name),
     email: String(ticketPayload.email).toLowerCase(),
   };
 
