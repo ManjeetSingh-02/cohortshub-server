@@ -1,3 +1,7 @@
+// import local modules
+import { USER_ROLES } from '../utils/constants.js';
+import { Cohort, User } from './index.js';
+
 // import external modules
 import mongoose from 'mongoose';
 
@@ -51,6 +55,29 @@ const cohortSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// post-hook to add all system admins email to allowedUserEmails and user
+cohortSchema.post('save', async function (doc) {
+  if (doc.$wasNew) {
+    // fetch all system admins from db
+    const systemAdmins = await User.find({ role: USER_ROLES.SYSTEM_ADMIN }).select('email');
+
+    // extract emails
+    const adminEmails = systemAdmins.map(admin => admin.email);
+
+    // update cohort allowedUserEmails
+    await Cohort.updateOne(
+      { _id: doc._id },
+      { $addToSet: { allowedUserEmails: { $each: adminEmails } } }
+    );
+
+    // update system admins enrolledCohorts
+    await User.updateMany(
+      { role: USER_ROLES.SYSTEM_ADMIN },
+      { $addToSet: { enrolledCohorts: doc._id } }
+    );
+  }
+});
 
 // export cohort model
 export default mongoose.model('Cohort', cohortSchema);
