@@ -42,8 +42,8 @@ export const REFRESH_TOKEN_COOKIE_CONFIG = {
 
 // user roles
 export const USER_ROLES = {
-  SYSTEM_ADMIN: 'system_admin',
-  ADMIN: 'admin',
+  SYSTEM_ADMIN: 'system_admin', // can Create, Read and Update Cohorts
+  COHORT_ADMIN: 'cohort_admin', // can Read and Update Cohorts
   STUDENT: 'student',
 };
 
