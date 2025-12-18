@@ -1,6 +1,11 @@
 // import local modules
 import { USER_ROLES } from '../../../utils/constants.js';
-import { hasRequiredRole, isLoggedIn, validateSchema } from '../../../utils/route-protector.js';
+import {
+  hasRequiredRole,
+  isCohortValid,
+  isLoggedIn,
+  validateSchema,
+} from '../../../utils/route-protector.js';
 import {
   addUserToCohort,
   createCohort,
@@ -42,6 +47,7 @@ router.patch(
   '/:cohortName/description',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  isCohortValid,
   validateSchema(updateCohortDescriptionSchema),
   updateCohortDescription
 );
@@ -51,6 +57,7 @@ router.patch(
   '/:cohortName/process-csv',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  isCohortValid,
   uploadCSVFiles,
   validateSchema(processCSVandAddUsersToCohortSchema),
   processCSVandAddUsersToCohort
@@ -61,6 +68,7 @@ router.patch(
   '/:cohortName/add-user',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  isCohortValid,
   validateSchema(addUserToCohortSchema),
   addUserToCohort
 );
@@ -70,12 +78,13 @@ router.patch(
   '/:cohortName/remove-user',
   isLoggedIn,
   hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  isCohortValid,
   validateSchema(removeUserFromCohortSchema),
   removeUserFromCohort
 );
 
 // @route /:cohortName/group
-router.use('/:cohortName/group', groupRouter);
+router.use('/:cohortName/group', isLoggedIn, isCohortValid, groupRouter);
 
 // export router
 export default router;

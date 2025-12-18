@@ -3,10 +3,31 @@ import { APIError } from '../api/error.api.js';
 import { asyncHandler } from './async-handler.js';
 import { REFRESH_TOKEN_COOKIE_CONFIG } from './constants.js';
 import { envConfig } from './env.js';
-import { User } from '../models/index.js';
+import { Cohort, User } from '../models/index.js';
 
 // import external modules
 import jwt from 'jsonwebtoken';
+
+// function to check if cohort exists
+export const isCohortValid = asyncHandler(async (req, _, next) => {
+  // get cohort from db
+  const existingCohort = await Cohort.findOne({ cohortName: req.params.cohortName });
+
+  // if cohort doesn't exist, throw an error
+  if (!existingCohort)
+    throw new APIError(404, {
+      type: 'Cohort Validation Error',
+      message: `Cohort with name '${req.params.cohortName}' does not exist`,
+    });
+
+  // set cohort in request object
+  req.cohort = {
+    id: existingCohort._id,
+  };
+
+  // forward request to next middleware
+  next();
+});
 
 // function to check for any validation errors
 export const validateSchema = zodSchema =>
