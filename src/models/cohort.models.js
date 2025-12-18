@@ -56,31 +56,25 @@ const cohortSchema = new mongoose.Schema(
   }
 );
 
-// pre-hook to mark if document is new
+// pre-hook to create temporary property to check if document is new
 cohortSchema.pre('save', function () {
   this.$wasNew = this.isNew;
 });
 
-// post-hook to add all system admins email to allowedUserEmails and user
+// post-hook to add system admin email to allowedUserEmails
 cohortSchema.post('save', async function (doc) {
   if (doc.$wasNew) {
-    // fetch all system admins from db
-    const systemAdmins = await User.find({ role: USER_ROLES.SYSTEM_ADMIN }).select('email');
+    // fetch all system admin from db
+    const systemAdmin = await User.findOne({ role: USER_ROLES.SYSTEM_ADMIN }).select('email');
 
-    // extract emails
-    const adminEmails = systemAdmins.map(admin => admin.email);
-
-    // update cohort allowedUserEmails
+    // update cohort allowedUserEmails to include system admin email
     await Cohort.updateOne(
       { _id: doc._id },
-      { $addToSet: { allowedUserEmails: { $each: adminEmails } } }
+      { $addToSet: { allowedUserEmails: systemAdmin.email } }
     );
 
-    // update system admins enrolledCohorts
-    await User.updateMany(
-      { role: USER_ROLES.SYSTEM_ADMIN },
-      { $addToSet: { enrolledCohorts: doc._id } }
-    );
+    // update system admin enrolledCohorts to include this cohort
+    await User.updateOne({ _id: systemAdmin._id }, { $addToSet: { enrolledCohorts: doc._id } });
 
     // delete the temporary property
     delete doc.$wasNew;
