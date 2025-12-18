@@ -56,6 +56,11 @@ const cohortSchema = new mongoose.Schema(
   }
 );
 
+// pre-hook to mark if document is new
+cohortSchema.pre('save', function () {
+  this.$wasNew = this.isNew;
+});
+
 // post-hook to add all system admins email to allowedUserEmails and user
 cohortSchema.post('save', async function (doc) {
   if (doc.$wasNew) {
@@ -76,6 +81,9 @@ cohortSchema.post('save', async function (doc) {
       { role: USER_ROLES.SYSTEM_ADMIN },
       { $addToSet: { enrolledCohorts: doc._id } }
     );
+
+    // delete the temporary property
+    delete doc.$wasNew;
   }
 });
 
