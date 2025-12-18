@@ -57,3 +57,6 @@ export const CSV_UPLOAD_CONFIG = {
   FIELD_NAME: 'csvFiles',
   FIELD_MAX_COUNT: 1,
 };
+
+// maximum limit of members in a group
+export const MAX_GROUP_MEMBERS = 4;
