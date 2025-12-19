@@ -15,7 +15,7 @@ export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
     {
       path: 'associatedGroups',
       select:
-        '_id groupName groupDescription groupMembers maximumMembers roleRequirements createdBy',
+        '_id groupName groupMembers maximumMembers roleRequirements createdBy',
       populate: {
         path: 'createdBy',
         select: '-_id username',
