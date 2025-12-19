@@ -54,12 +54,12 @@ const userExpertiseSchema = new mongoose.Schema(
 // schema for socialLink
 const socialLinkSchema = new mongoose.Schema(
   {
-    platform: {
+    platformName: {
       type: String,
       required: true,
       trim: true,
     },
-    url: {
+    platformURL: {
       type: String,
       required: true,
       trim: true,
