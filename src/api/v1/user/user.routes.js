@@ -1,7 +1,8 @@
 // import local modules
 import { USER_ROLES } from '../../../utils/constants.js';
-import { hasRequiredRole, isLoggedIn } from '../../../utils/route-protector.js';
-import { getAllUsers, getUser } from './user.controllers.js';
+import { hasRequiredRole, isLoggedIn, validateSchema } from '../../../utils/route-protector.js';
+import { getAllUsers, getUser, updateUserRole } from './user.controllers.js';
+import { updateUserRoleSchema } from './user.zodschemas.js';
 
 // import external modules
 import { Router } from 'express';
@@ -14,6 +15,15 @@ router.get('/', isLoggedIn, hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]), getAllUs
 
 // @route GET /profile
 router.get('/profile', isLoggedIn, getUser);
+
+// @route PATCH /role
+router.patch(
+  '/role',
+  isLoggedIn,
+  hasRequiredRole([USER_ROLES.SYSTEM_ADMIN]),
+  validateSchema(updateUserRoleSchema),
+  updateUserRole
+);
 
 // export router
 export default router;

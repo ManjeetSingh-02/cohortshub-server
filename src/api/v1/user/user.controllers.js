@@ -41,3 +41,38 @@ export const getUser = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// @controller PATCH /role
+export const updateUserRole = asyncHandler(async (req, res) => {
+  // check if user is trying to update his own role
+  if (req.user.email === req.body.userEmail)
+    throw new APIError(400, {
+      message: 'You cannot update your own role',
+    });
+
+  // fetch user from db
+  const existingUser = await User.findOne({ email: req.body.userEmail });
+  if (!existingUser)
+    throw new APIError(404, {
+      message: 'User not found',
+    });
+
+  // check if user has already the role
+  if (existingUser.role === req.body.newRole)
+    throw new APIError(400, {
+      message: `User already has the role of ${req.body.newRole}`,
+    });
+
+  // update user role
+  existingUser.role = req.body.newRole;
+
+  // save updated user to db
+  await existingUser.save();
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'User role updated successfully',
+    })
+  );
+});
