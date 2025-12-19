@@ -43,6 +43,31 @@ export const getUser = asyncHandler(async (req, res) => {
   );
 });
 
+// @controller PATCH /
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  // if no fields to update are present in the body, throw error
+  if (!req.body.newUserExpertise && !req.body.newSocialLinks)
+    throw new APIError(400, {
+      message: 'No fields are provided to update user profile',
+    });
+
+  // if userExpertise is present in the body, update it
+  if (req.body.newUserExpertise) req.user.userExpertise = req.body.newUserExpertise;
+
+  // if socialLinks is present in the body, update it
+  if (req.body.newSocialLinks) req.user.socialLinks = req.body.newSocialLinks;
+
+  // save updated user to db
+  await req.user.save();
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'Profile updated successfully',
+    })
+  );
+});
+
 // @controller PATCH /role
 export const updateUserRole = asyncHandler(async (req, res) => {
   // check if user is trying to update his own role
