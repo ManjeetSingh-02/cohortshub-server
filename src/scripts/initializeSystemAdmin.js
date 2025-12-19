@@ -26,14 +26,14 @@ async function getSystemAdminUserEmailFromCLI() {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('--- Database Connection: ✅');
 
-    // get systemAdminUserEmail from CLI
-    const email = await getSystemAdminUserEmailFromCLI();
-
     // find existing system_admin user
     const existingSystemAdminUser = await User.findOne({ role: USER_ROLES.SYSTEM_ADMIN });
 
     // if system_admin user exists, throw error as only one system admin user is allowed
     if (existingSystemAdminUser) throw new Error('A System_Admin User already exists');
+
+    // get systemAdminUserEmail from CLI
+    const email = await getSystemAdminUserEmailFromCLI();
 
     // create systemAdminUser with provided email
     const systemAdminUser = await User.create({
