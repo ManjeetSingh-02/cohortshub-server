@@ -19,14 +19,16 @@ export const updateUserProfileSchema = z.object({
       .array(
         z.object({
           roleName: z.string().min(1, { message: 'roleName is required' }).trim(),
-          techStack: z.array(
-            z.object({
-              skillName: z.string().min(1, { message: 'skillName is required' }).trim(),
-              experienceInMonths: z
-                .number()
-                .min(0, { message: 'experienceInMonths must be at least 0' }),
-            })
-          ),
+          techStack: z
+            .array(
+              z.object({
+                skillName: z.string().min(1, { message: 'skillName is required' }).trim(),
+                experienceInMonths: z
+                  .number()
+                  .min(0, { message: 'experienceInMonths must be at least 0' }),
+              })
+            )
+            .min(1, { message: 'At least one techStack is required' }),
         })
       )
       .optional(),
