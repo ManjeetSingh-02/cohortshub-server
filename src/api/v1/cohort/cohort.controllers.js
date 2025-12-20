@@ -58,16 +58,13 @@ export const getAllCohorts = asyncHandler(async (_, res) => {
 
 // @controller PATCH /:cohortName/process-csv
 export const processCSVandAddUsersToCohort = asyncHandler(async (req, res) => {
-  // fetch cohort by name
-  const existingCohort = req.cohort;
-
   // parse all uploaded CSV files
   const allParsedFileResults = await Promise.all(
     req.files[CSV_UPLOAD_CONFIG.FIELD_NAME].map(file => parseCSVFile(file.buffer))
   );
 
   // create a email set to track duplicates
-  const emailSet = new Set(existingCohort.allowedUserEmails);
+  const emailSet = new Set(req.cohort.allowedUserEmails);
 
   // extract user emails from parsed results and add to email set
   allParsedFileResults.forEach(parsedFileResult => {
@@ -77,16 +74,16 @@ export const processCSVandAddUsersToCohort = asyncHandler(async (req, res) => {
   });
 
   // convert email set back to array
-  existingCohort.allowedUserEmails = Array.from(emailSet);
+  req.cohort.allowedUserEmails = Array.from(emailSet);
 
   // save updated cohort to db
-  await existingCohort.save({ validateBeforeSave: false });
+  await req.cohort.save({ validateBeforeSave: false });
 
   // send success status to user
   return res.status(200).json(
     new APIResponse(200, {
       message: 'CSV processed and userEmails added to cohort successfully',
-      data: { totalUsersAdded: existingCohort.allowedUserEmails.length },
+      data: { totalUsersAdded: req.cohort.allowedUserEmails.length },
     })
   );
 });
