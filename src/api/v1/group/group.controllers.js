@@ -14,16 +14,13 @@ export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
     },
     {
       path: 'associatedGroups',
-      select: '_id groupName groupMembers maximumMembers roleRequirements createdBy',
+      select: '_id groupName createdBy groupMembersCount maximumMembersCount roleRequirements',
       populate: {
         path: 'createdBy',
         select: '-_id username',
       },
     },
   ]);
-
-  // object-converted populated cohort data
-  const populatedCohortDataObject = populatedCohortData.toObject();
 
   // send success status to user
   return res.status(200).json(
@@ -34,10 +31,7 @@ export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
         cohortName: req.cohort.cohortName,
         cohortDescription: req.cohort.cohortDescription,
         createdBy: populatedCohortData.createdBy,
-        associatedGroups: populatedCohortDataObject.associatedGroups.map(associatedGroup => ({
-          ...associatedGroup,
-          groupMembers: associatedGroup.groupMembers.length,
-        })),
+        associatedGroups: populatedCohortData.associatedGroups,
       },
     })
   );
@@ -60,7 +54,7 @@ export const createGroup = asyncHandler(async (req, res) => {
   const newGroup = await Group.create({
     groupName: req.body.groupName,
     createdBy: req.user._id,
-    groupMembers: [req.user._id],
+    currentGroupMembers: [req.user._id],
     associatedCohort: req.cohort._id,
   });
   if (!newGroup)
