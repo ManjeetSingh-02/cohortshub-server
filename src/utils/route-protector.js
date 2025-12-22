@@ -64,9 +64,7 @@ export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
   const existingGroup = await Group.findOne({
     groupName: req.params.groupName,
     associatedCohort: req.cohort.id,
-  }).select(
-    '_id groupName createdBy currentGroupMembers groupMembersCount maximumMembersCount roleRequirements groupAnnouncements'
-  );
+  }).select('_id');
   if (!existingGroup)
     throw new APIError(404, {
       type: 'Group Validation Error',
