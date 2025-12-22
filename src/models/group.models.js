@@ -99,7 +99,7 @@ const groupSchema = new mongoose.Schema(
     },
     groupMembersCount: {
       type: Number,
-      default: 0,
+      default: 1,
     },
     maximumMembersCount: {
       type: Number,
