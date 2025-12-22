@@ -2,7 +2,7 @@
 import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIResponse } from '../../response.api.js';
 import { APIError } from '../../error.api.js';
-import { Group } from '../../../models/index.js';
+import { Group, User } from '../../../models/index.js';
 
 // @controller GET /
 export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
@@ -66,8 +66,9 @@ export const createGroup = asyncHandler(async (req, res) => {
     });
 
   // update user's currentGroup field and save it
-  req.user.currentGroup = newGroup._id;
-  await req.user.save();
+  const existingUser = await User.findById(req.user.id).select('currentGroup');
+  existingUser.currentGroup = newGroup._id;
+  await existingUser.save();
 
   // update cohort's associatedGroups field and save it
   req.cohort.associatedGroups.push(newGroup._id);
