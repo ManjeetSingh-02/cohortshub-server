@@ -39,7 +39,7 @@ export const createGroup = asyncHandler(async (req, res) => {
   // check if group with same name exists
   const existingGroup = await Group.findOne({
     groupName: req.body.groupName,
-    associatedCohort: req.cohort._id,
+    associatedCohort: req.cohort.id,
   })
     .select('_id')
     .lean();
@@ -54,7 +54,7 @@ export const createGroup = asyncHandler(async (req, res) => {
     groupName: req.body.groupName,
     createdBy: req.user.id,
     currentGroupMembers: [req.user.id],
-    associatedCohort: req.cohort._id,
+    associatedCohort: req.cohort.id,
   });
   if (!newGroup)
     throw new APIError(500, {
