@@ -2,37 +2,34 @@
 import { asyncHandler } from '../../../utils/async-handler.js';
 import { APIResponse } from '../../response.api.js';
 import { APIError } from '../../error.api.js';
-import { Group, User } from '../../../models/index.js';
+import { Cohort, Group, User } from '../../../models/index.js';
 
 // @controller GET /
 export const getCohortDetailsandGroups = asyncHandler(async (req, res) => {
-  // populate group info for response
-  const populatedCohortData = await req.cohort.populate([
-    {
-      path: 'createdBy',
-      select: '_id username',
-    },
-    {
+  // fetch cohort from db
+  const existingCohort = await Cohort.findById(req.cohort.id)
+    .select('_id cohortName cohortDescription createdBy associatedGroups')
+    .populate('createdBy', '_id username')
+    .populate({
       path: 'associatedGroups',
       select: '_id groupName createdBy groupMembersCount maximumMembersCount roleRequirements',
       populate: {
         path: 'createdBy',
         select: '_id username',
       },
-    },
-  ]);
+    })
+    .lean();
+  if (!existingCohort)
+    throw new APIError(404, {
+      type: 'Cohort Fetch Error',
+      message: 'Cohort not found',
+    });
 
   // send success status to user
   return res.status(200).json(
     new APIResponse(200, {
       message: 'Cohort details and associated groups fetched successfully',
-      data: {
-        cohortID: req.cohort._id,
-        cohortName: req.cohort.cohortName,
-        cohortDescription: req.cohort.cohortDescription,
-        createdBy: populatedCohortData.createdBy,
-        associatedGroups: populatedCohortData.associatedGroups,
-      },
+      data: existingCohort,
     })
   );
 });
