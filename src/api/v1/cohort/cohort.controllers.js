@@ -8,11 +8,8 @@ import { CSV_UPLOAD_CONFIG } from '../../../utils/constants.js';
 
 // @controller POST /
 export const createCohort = asyncHandler(async (req, res) => {
-  // get data from request body
-  const { cohortName, cohortDescription } = req.body;
-
   // check if cohort with the same name already exists
-  const existingCohort = await Cohort.findOne({ cohortName });
+  const existingCohort = await Cohort.findOne({ cohortName: req.body.cohortName });
   if (existingCohort)
     throw new APIError(409, {
       type: 'Create Cohort Error',
@@ -21,8 +18,8 @@ export const createCohort = asyncHandler(async (req, res) => {
 
   // create new cohort in db
   const newCohort = await Cohort.create({
-    cohortName,
-    cohortDescription,
+    cohortName: req.body.cohortName,
+    cohortDescription: req.body.cohortDescription,
     createdBy: req.user._id,
   });
   if (!newCohort)
