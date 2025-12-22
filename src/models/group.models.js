@@ -83,7 +83,7 @@ const groupSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    groupMembers: {
+    currentGroupMembers: {
       type: [
         {
           type: mongoose.Schema.Types.ObjectId,
@@ -92,7 +92,11 @@ const groupSchema = new mongoose.Schema(
       ],
       required: true,
     },
-    maximumMembers: {
+    groupMembersCount: {
+      type: Number,
+      required: true,
+    },
+    maximumMembersCount: {
       type: Number,
       default: MAX_GROUP_MEMBERS,
     },
