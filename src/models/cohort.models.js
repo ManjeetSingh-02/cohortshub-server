@@ -14,13 +14,13 @@ const cohortSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       minLength: 10,
-      maxLength: 50,
+      maxLength: 30,
     },
     cohortDescription: {
       type: String,
       required: true,
       trim: true,
-      minLength: 20,
+      minLength: 10,
       maxLength: 200,
     },
     createdBy: {
