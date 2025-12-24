@@ -6,8 +6,8 @@ const cohortNameSchema = z
   .string()
   .trim()
   .nonempty({ message: 'cohortName is required' })
-  .min(10, { message: 'Username must be at least 10 characters long' })
-  .max(50, { message: 'Username must be at most 50 characters long' });
+  .min(10, { message: 'cohortName must be at least 10 characters long' })
+  .max(50, { message: 'cohortName must be at most 50 characters long' });
 
 // zod schema for cohortDescription
 const cohortDescriptionSchema = z
