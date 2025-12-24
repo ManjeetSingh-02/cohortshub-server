@@ -32,9 +32,9 @@ router.post('/', isUserAlreadyInAGroup, validateSchema(createGroupSchema), creat
 // @route GET /:groupName
 router.get('/:groupName', isUserAllowedInGroup, getGroupDetails);
 
-// @route PATCH /:groupName
+// @route PATCH /:groupName/role-requirements
 router.patch(
-  '/:groupName',
+  '/:groupName/role-requirements',
   isUserAllowedInGroup,
   validateSchema(updateGroupRoleRequirementsSchema),
   updateGroupRoleRequirements
