@@ -1,7 +1,7 @@
 // import local modules
 import { APIError } from '../api/error.api.js';
 import { asyncHandler } from './async-handler.js';
-import { REFRESH_TOKEN_COOKIE_CONFIG } from './constants.js';
+import { REFRESH_TOKEN_COOKIE_CONFIG, USER_ROLES } from './constants.js';
 import { envConfig } from './env.js';
 import { Cohort, Group, User } from '../models/index.js';
 
@@ -64,23 +64,37 @@ export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
   const existingGroup = await Group.findOne({
     groupName: req.params.groupName,
     associatedCohort: req.cohort.id,
-  }).select('_id');
+  })
+    .select('_id createdBy')
+    .lean();
   if (!existingGroup)
     throw new APIError(404, {
       type: 'Group Validation Error',
       message: `Group '${req.params.groupName}' not found in this cohort`,
     });
 
-  // check if user is not a member of the group
-  if (!req.user.currentGroup || req.user.currentGroup.toString() !== existingGroup._id.toString())
-    throw new APIError(403, {
-      type: 'Group Authorization Error',
-      message: `User is not a member of group '${req.params.groupName}'`,
-    });
+  // check if user is system_admin or cohort_admin
+  const isAdmin = [USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN].includes(req.user.role);
 
-  // set group in request object
+  // check if user role is student and not a part of group then throw an error
+  if (req.user.role === USER_ROLES.STUDENT) {
+    if (!req.user.currentGroup || String(req.user.currentGroup) !== String(existingGroup._id))
+      throw new APIError(403, {
+        type: 'Group Authorization Error',
+        message: `User is not a member of group '${req.params.groupName}'`,
+      });
+  }
+
+  // if user is creator of the group, set admin access to true
+  const isGroupCreator = String(existingGroup.createdBy) === String(req.user.id);
+
+  // determine if user has group access
+  const hasGroupAccess = isAdmin || isGroupCreator;
+
+  // set group in request object with id and a flag indicating group access
   req.group = {
     id: existingGroup._id,
+    groupAccess: hasGroupAccess,
   };
 
   // forward request to next middleware
