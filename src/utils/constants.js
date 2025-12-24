@@ -60,3 +60,13 @@ export const CSV_UPLOAD_CONFIG = {
 
 // maximum limit of members in a group
 export const MAX_GROUP_MEMBERS = 4;
+
+// application status
+export const APPLICATION_STATUS = {
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+};
+
+// all application status array
+export const availableApplicationStatus = Object.values(APPLICATION_STATUS);
