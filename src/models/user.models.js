@@ -126,6 +126,15 @@ const userSchema = new mongoose.Schema(
       ],
       required: isFieldRequired,
     },
+    groupApplications: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Application',
+        },
+      ],
+      default: [],
+    },
     auditLogs: {
       type: [
         {
