@@ -86,7 +86,7 @@ export const getGroupDetails = asyncHandler(async (req, res) => {
   // fetch group from db
   const existingGroup = await Group.findById(req.group.id)
     .select(
-      '_id groupName createdBy currentGroupMembers groupMembersCount maximumMembersCount roleRequirements'
+      '_id groupName createdBy currentGroupMembers groupMembersCount maximumMembersCount roleRequirements groupAnnouncements'
     )
     .populate('createdBy', '_id username')
     .populate('currentGroupMembers', '_id username')
@@ -107,7 +107,7 @@ export const getGroupDetails = asyncHandler(async (req, res) => {
   );
 });
 
-// @controller PATCH /:groupName
+// @controller PATCH /:groupName/role-requirements
 export const updateGroupRoleRequirements = asyncHandler(async (req, res) => {
   // check if user has permission to update group
   if (!req.group.groupAccess)
