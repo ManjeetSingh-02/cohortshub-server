@@ -32,7 +32,7 @@ export const updateGroupRoleRequirementsSchema = z.object({
               isMandatory: z.boolean(),
             })
           )
-          .nonempty({ message: 'At least one techStack item is required' }),
+          .nonempty({ error: 'At least one techStack item is required' }),
       })
     ),
   }),
