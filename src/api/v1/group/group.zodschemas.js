@@ -37,3 +37,31 @@ export const updateGroupRoleRequirementsSchema = z.object({
     ),
   }),
 });
+
+// zod schema for updateGroupAnnouncements
+export const updateGroupAnnouncementsSchema = z.object({
+  params: z.object({
+    groupName: z.string().trim().nonempty({ error: 'groupName is required' }),
+  }),
+  body: z.object({
+    newAnnouncement: z.object({
+      announcementText: z
+        .string()
+        .trim()
+        .nonempty({ error: 'announcementText is required' })
+        .min(10, { error: 'announcementText must be at least 10 characters long' })
+        .max(500, { error: 'announcementText must be at most 500 characters long' }),
+      announcementResources: z
+        .array(
+          z.object({
+            resourceName: z
+              .string()
+              .trim()
+              .nonempty({ error: 'Atleast one resourceName is required' }),
+            resourceURL: z.url({ error: 'Valid resourceURL is required' }).trim(),
+          })
+        )
+        .optional(),
+    }),
+  }),
+});

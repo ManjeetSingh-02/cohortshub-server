@@ -137,3 +137,34 @@ export const updateGroupRoleRequirements = asyncHandler(async (req, res) => {
     })
   );
 });
+
+// @controller PATCH /:groupName/announcements
+export const updateGroupAnnouncements = asyncHandler(async (req, res) => {
+  // check if user has permission to post announcement
+  if (!req.group.groupAccess)
+    throw new APIError(403, {
+      type: 'Permission Denied',
+      message: 'You do not have permission to post announcement in this group',
+    });
+
+  // push new announcement group's announcement array field
+  const updatedGroup = await Group.findByIdAndUpdate(
+    req.group.id,
+    {
+      $push: { groupAnnouncements: req.body.newAnnouncement },
+    },
+    { runValidators: true, new: true }
+  );
+  if (!updatedGroup)
+    throw new APIError(500, {
+      type: 'Update Announcement Error',
+      message: 'Something went wrong while posting the announcement',
+    });
+
+  // send success status to user
+  return res.status(200).json(
+    new APIResponse(200, {
+      message: 'Group announcement posted successfully',
+    })
+  );
+});

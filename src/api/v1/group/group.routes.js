@@ -3,6 +3,7 @@ import {
   createGroup,
   getCohortDetailsandGroups,
   getGroupDetails,
+  updateGroupAnnouncements,
   updateGroupRoleRequirements,
 } from './group.controllers.js';
 import {
@@ -10,7 +11,11 @@ import {
   isUserAllowedInGroup,
   validateSchema,
 } from '../../../utils/route-protector.js';
-import { createGroupSchema, updateGroupRoleRequirementsSchema } from './group.zodschemas.js';
+import {
+  createGroupSchema,
+  updateGroupAnnouncementsSchema,
+  updateGroupRoleRequirementsSchema,
+} from './group.zodschemas.js';
 
 // import external modules
 import { Router } from 'express';
@@ -33,6 +38,14 @@ router.patch(
   isUserAllowedInGroup,
   validateSchema(updateGroupRoleRequirementsSchema),
   updateGroupRoleRequirements
+);
+
+// @route PATCH /:groupName/announcements
+router.patch(
+  '/:groupName/announcements',
+  isUserAllowedInGroup,
+  validateSchema(updateGroupAnnouncementsSchema),
+  updateGroupAnnouncements
 );
 
 // export router
