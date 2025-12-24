@@ -12,10 +12,10 @@ const techStackSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    minimumExperienceInMonths: {
+    experienceInMonths: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
     },
     isMandatory: {
       type: Boolean,
@@ -81,7 +81,7 @@ const groupSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minLength: 5,
-      maxLength: 50,
+      maxLength: 20,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
