@@ -27,7 +27,7 @@ const techStackSchema = new mongoose.Schema(
     experienceInMonths: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
     },
   },
   {
