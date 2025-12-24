@@ -18,14 +18,14 @@ export const updateUserProfileSchema = z.object({
     newUserExpertise: z
       .array(
         z.object({
-          roleName: z.string().nonempty({ error: 'Atleast one roleName is required' }).trim(),
+          roleName: z.string().trim().nonempty({ error: 'Atleast one roleName is required' }),
           techStack: z
             .array(
               z.object({
                 skillName: z
                   .string()
-                  .nonempty({ error: 'Atleast one skillName is required' })
-                  .trim(),
+                  .trim()
+                  .nonempty({ error: 'Atleast one skillName is required' }),
                 experienceInMonths: z
                   .number()
                   .min(1, { error: 'experienceInMonths must be at least 1' }),
