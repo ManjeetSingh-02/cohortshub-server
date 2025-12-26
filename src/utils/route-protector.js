@@ -11,9 +11,9 @@ import jwt from 'jsonwebtoken';
 // function to check if cohort exists
 export const isCohortValid = asyncHandler(async (req, _, next) => {
   // get cohort from db
-  const existingCohort = await Cohort.findOne({ cohortName: req.params.cohortName }).select(
-    '_id cohortName cohortDescription createdBy associatedGroups allowedUserEmails'
-  );
+  const existingCohort = await Cohort.findOne({ cohortName: req.params.cohortName })
+    .select('_id allowedUserEmails')
+    .lean();
 
   // if cohort doesn't exist, throw an error
   if (!existingCohort)
@@ -140,7 +140,9 @@ export const isLoggedIn = asyncHandler(async (req, _, next) => {
   const decodedToken = decodeAccessToken(authorizationHeaders.split(' ')[1]);
 
   // check if user exists
-  const loggedInUser = await User.findById(decodedToken?.id).select('_id email role currentGroup');
+  const loggedInUser = await User.findById(decodedToken?.id)
+    .select('_id email role currentGroup')
+    .lean();
   if (!loggedInUser)
     throw new APIError(401, {
       type: 'Authentication Error',
