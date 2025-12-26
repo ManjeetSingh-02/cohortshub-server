@@ -65,12 +65,12 @@ export const createGroup = asyncHandler(async (req, res) => {
   // update user's currentGroup field and save it
   const existingUser = await User.findById(req.user.id).select('currentGroup');
   existingUser.currentGroup = newGroup._id;
-  await existingUser.save();
+  await existingUser.save({ validateBeforeSave: false });
 
   // update cohort's associatedGroups field and save it
   const existingCohort = await Cohort.findById(req.cohort.id).select('associatedGroups');
   existingCohort.associatedGroups.push(newGroup._id);
-  await existingCohort.save();
+  await existingCohort.save({ validateBeforeSave: false });
 
   // send success status to user
   return res.status(201).json(
