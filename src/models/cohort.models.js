@@ -41,15 +41,6 @@ const cohortSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    auditLogs: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'AuditLog',
-        },
-      ],
-      default: [],
-    },
   },
   {
     timestamps: true,

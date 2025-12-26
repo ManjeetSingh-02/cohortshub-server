@@ -108,15 +108,6 @@ const applicationSchema = new mongoose.Schema(
       enum: availableApplicationStatus,
       default: APPLICATION_STATUS.PENDING,
     },
-    auditLogs: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'AuditLog',
-        },
-      ],
-      default: [],
-    },
   },
   {
     timestamps: true,

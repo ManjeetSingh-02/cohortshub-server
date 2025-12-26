@@ -126,15 +126,6 @@ const groupSchema = new mongoose.Schema(
       ref: 'Cohort',
       required: true,
     },
-    auditLogs: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'AuditLog',
-        },
-      ],
-      default: [],
-    },
   },
   {
     timestamps: true,
