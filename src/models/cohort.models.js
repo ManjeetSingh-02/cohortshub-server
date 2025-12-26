@@ -32,15 +32,6 @@ const cohortSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    associatedGroups: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Group',
-        },
-      ],
-      default: [],
-    },
   },
   {
     timestamps: true,
