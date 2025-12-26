@@ -117,15 +117,6 @@ const userSchema = new mongoose.Schema(
       ref: 'Group',
       default: null,
     },
-    enrolledCohorts: {
-      type: [
-        {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Cohort',
-        },
-      ],
-      required: isFieldRequired,
-    },
   },
   {
     timestamps: true,
