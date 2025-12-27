@@ -41,29 +41,15 @@ export const doesGroupExistInCohort = asyncHandler(async (req, _, next) => {
 
 // function to check if user is allowed in the group
 export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
-  // fetch group from db
-  const existingGroup = await Group.findById(req.group.id).select('_id createdBy').lean();
-
-  // check if user is system_admin or cohort_admin
-  const isAdmin = [USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN].includes(req.user.role);
-
-  // check if user role is student and not a part of group then throw an error
-  if (req.user.role === USER_ROLES.STUDENT) {
-    if (!req.user.currentGroup || String(req.user.currentGroup) !== String(existingGroup._id))
-      throw new APIErrorResponse(403, {
-        type: 'Group Authorization Error',
-        message: `User is not a member of group '${req.params.groupName}'`,
-      });
-  }
-
-  // if user is creator of the group, set admin access to true
-  const isGroupCreator = existingGroup.createdBy.equals(req.user.id);
-
-  // determine if user has group access
-  const hasGroupAccess = isAdmin || isGroupCreator;
-
-  // set group access in request object
-  req.group.groupAccess = hasGroupAccess;
+  // check if user role is student and not a member of the group
+  if (
+    req.user.role === USER_ROLES.STUDENT &&
+    (!req.user.currentGroup || !req.user.currentGroup.equals(req.group.id))
+  )
+    throw new APIErrorResponse(403, {
+      type: 'Group Authorization Error',
+      message: `User is not a member of group '${req.params.groupName}'`,
+    });
 
   // forward request to next middleware
   next();
@@ -71,8 +57,17 @@ export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
 
 // function to check if user has admin access to the group
 export const isUserGroupAdmin = asyncHandler(async (req, _, next) => {
+  // fetch group from db
+  const existingGroup = await Group.findById(req.group.id).select('_id createdBy').lean();
+
+  // check if user is system_admin or cohort_admin
+  const isAdmin = [USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN].includes(req.user.role);
+
+  // if user is creator of the group, set admin access to true
+  const isGroupCreator = existingGroup.createdBy.equals(req.user.id);
+
   // if user does not have group admin access, throw an error
-  if (!req.group.groupAccess)
+  if (!isAdmin && !isGroupCreator)
     throw new APIErrorResponse(403, {
       type: 'Group Admin Authorization Error',
       message: 'User does not have admin access for this group',
