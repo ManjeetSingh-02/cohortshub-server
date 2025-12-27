@@ -1,6 +1,6 @@
 // import local modules
-import { User } from '../models/index.js';
-import { USER_ROLES } from '../utils/constants.js';
+import { User } from '../../models/index.js';
+import { USER_ROLES } from '../constants.js';
 
 // import external modules
 import mongoose from 'mongoose';
