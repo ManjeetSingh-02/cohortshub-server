@@ -24,7 +24,7 @@ export const doesGroupExistInCohort = asyncHandler(async (req, _, next) => {
     groupName: req.params.groupName,
     associatedCohort: req.cohort.id,
   })
-    .select('_id')
+    .select('_id createdBy')
     .lean();
   if (!existingGroup)
     throw new APIErrorResponse(404, {
@@ -35,6 +35,7 @@ export const doesGroupExistInCohort = asyncHandler(async (req, _, next) => {
   // set group id in request object
   req.group = {
     id: existingGroup._id,
+    createdBy: existingGroup.createdBy,
   };
 
   // forward request to next middleware
@@ -59,14 +60,11 @@ export const isUserAllowedInGroup = asyncHandler(async (req, _, next) => {
 
 // function to check if user has admin access to the group
 export const isUserGroupAdmin = asyncHandler(async (req, _, next) => {
-  // fetch group from db
-  const existingGroup = await Group.findById(req.group.id).select('_id createdBy').lean();
-
   // check if user is system_admin or cohort_admin
   const isAdmin = [USER_ROLES.SYSTEM_ADMIN, USER_ROLES.COHORT_ADMIN].includes(req.user.role);
 
   // if user is creator of the group, set admin access to true
-  const isGroupCreator = existingGroup.createdBy.equals(req.user.id);
+  const isGroupCreator = req.group.createdBy.equals(req.user.id);
 
   // if user does not have group admin access, throw an error
   if (!isAdmin && !isGroupCreator)
