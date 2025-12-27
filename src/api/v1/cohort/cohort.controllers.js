@@ -74,11 +74,6 @@ export const getCohortDetails = asyncHandler(async (req, res) => {
       },
     })
     .lean();
-  if (!existingCohort)
-    throw new APIErrorResponse(404, {
-      type: 'Cohort Fetch Error',
-      message: 'Cohort not found',
-    });
 
   // send success status to user
   return res.status(200).json(
