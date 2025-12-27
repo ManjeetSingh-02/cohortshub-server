@@ -1,5 +1,5 @@
-// class to standardize API responses
-export class APIResponse {
+// class to standardize API Success responses
+export class APISuccessResponse {
   constructor(statusCode, response = { message: 'Success', data: null }) {
     this.success = true;
     this.statusCode = statusCode;
@@ -7,8 +7,8 @@ export class APIResponse {
   }
 }
 
-// class to standardize API Errors
-export class APIError extends Error {
+// class to standardize API Errors responses
+export class APIErrorResponse extends Error {
   constructor(statusCode, error = { type, message, issues: null }, stack = null) {
     super('Something went wrong');
     this.success = false;
