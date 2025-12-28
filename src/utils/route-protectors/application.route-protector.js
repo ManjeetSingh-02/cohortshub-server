@@ -5,7 +5,27 @@ import { Application } from '../../models/index.js';
 import { APPLICATION_STATUS } from '../constants.js';
 
 // function to check if application exists in the group
-export const doesApplicationExistInGroup = asyncHandler();
+export const doesApplicationExistInGroup = asyncHandler(async (req, _, next) => {
+  // find application by applicationID and groupID
+  const existingApplication = await Application.findOne({
+    _id: req.body.applicationID,
+    'applicantDetails.groupID': req.params.groupID,
+  }).lean();
+  if (!existingApplication)
+    throw new APIErrorResponse(404, {
+      type: 'Fetch Application Error',
+      message: 'Application not found in the specified group',
+    });
+
+  // set application in request object
+  req.application = {
+    id: existingApplication._id,
+    applicationStatus: existingApplication.applicationStatus,
+  };
+
+  // forward request to next middleware
+  next();
+});
 
 // function to check if user already has a pending application to any group
 export const userAlreadyHasAPendingApplication = asyncHandler(async (req, _, next) => {

@@ -4,7 +4,7 @@ import { APIErrorResponse, APISuccessResponse } from '../../response.api.js';
 import { Application, Group } from '../../../models/index.js';
 
 // @controller POST /
-export const createApplication = asyncHandler(async (req, res) => {
+export const postApplication = asyncHandler(async (req, res) => {
   // fetch group from db
   const existingGroup = await Group.findById(req.group.id)
     .select('createdBy maximumMembersCount groupMembersCount roleRequirements')
@@ -49,11 +49,11 @@ export const createApplication = asyncHandler(async (req, res) => {
   );
 });
 
-// @controller PATCH /accept
-export const acceptApplication = asyncHandler(async (req, res) => {});
+// @controller PATCH /:applicationID/approve
+export const approveApplication = asyncHandler(async (req, res) => {});
 
-// @controller PATCH /reject
-export const rejectApplication = asyncHandler(async (req, res) => {});
+// @controller PATCH /:applicationID/deny
+export const denyApplication = asyncHandler(async (req, res) => {});
 
-// @controller PATCH /withdraw
+// @controller PATCH /:applicationID/withdraw
 export const withdrawApplication = asyncHandler(async (req, res) => {});

@@ -1,8 +1,8 @@
 // import local modules
 import {
-  acceptApplication,
-  createApplication,
-  rejectApplication,
+  approveApplication,
+  postApplication,
+  denyApplication,
   withdrawApplication,
 } from './application.controllers.js';
 import {
@@ -26,17 +26,27 @@ router.post(
   isUserAlreadyInAGroup,
   userAlreadyHasAPendingApplication,
   validateSchema(createApplicationSchema),
-  createApplication
+  postApplication
 );
 
-// @route PATCH /accept
-router.patch('/accept', isUserGroupAdmin, acceptApplication);
+// @route PATCH /:applicationID/approve
+router.patch(
+  '/:applicationID/approve',
+  doesApplicationExistInGroup,
+  isUserGroupAdmin,
+  approveApplication
+);
 
-// @route PATCH /reject
-router.patch('/reject', isUserGroupAdmin, rejectApplication);
+// @route PATCH /:applicationID/deny
+router.patch(
+  '/:applicationID/deny',
+  doesApplicationExistInGroup,
+  isUserGroupAdmin,
+  denyApplication
+);
 
-// @route PATCH /withdraw
-router.patch('/withdraw', doesApplicationExistInGroup, withdrawApplication);
+// @route PATCH /:applicationID/withdraw
+router.patch('/:applicationID/withdraw', doesApplicationExistInGroup, withdrawApplication);
 
 // export router
 export default router;
