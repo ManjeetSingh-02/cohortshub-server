@@ -12,7 +12,7 @@ export const userAlreadyHasAPendingApplication = asyncHandler(async (req, _, nex
   // find pending application by the user
   const pendingApplication = await Application.findOne({
     'applicantDetails.applicantID': req.user.id,
-    applicationStatus: APPLICATION_STATUS.PENDING,
+    applicationStatus: APPLICATION_STATUS.UNDER_REVIEW,
   }).lean();
   if (pendingApplication)
     throw new APIErrorResponse(400, {

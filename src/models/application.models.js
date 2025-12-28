@@ -70,7 +70,7 @@ const applicationReviewerSchema = new mongoose.Schema(
     },
     applicationReviewerFeedback: {
       type: String,
-      default: DEFAULT_REVIEWER_FEEDBACK.PENDING,
+      default: DEFAULT_REVIEWER_FEEDBACK.UNDER_REVIEW,
       trim: true,
       minLength: 10,
       maxLength: 200,
@@ -103,7 +103,7 @@ const applicationSchema = new mongoose.Schema(
     applicationStatus: {
       type: String,
       enum: availableApplicationStatus,
-      default: APPLICATION_STATUS.PENDING,
+      default: APPLICATION_STATUS.UNDER_REVIEW,
     },
   },
   {
