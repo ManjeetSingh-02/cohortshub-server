@@ -15,9 +15,6 @@ export const createGroupSchema = z.object({
 
 // zod schema for updateGroupRoleRequirements
 export const updateGroupRoleRequirementsSchema = z.object({
-  params: z.object({
-    groupName: z.string().trim().nonempty({ error: 'groupName is required' }),
-  }),
   body: z.object({
     roleRequirements: z.array(
       z.object({
@@ -40,9 +37,6 @@ export const updateGroupRoleRequirementsSchema = z.object({
 
 // zod schema for updateGroupAnnouncements
 export const updateGroupAnnouncementsSchema = z.object({
-  params: z.object({
-    groupName: z.string().trim().nonempty({ error: 'groupName is required' }),
-  }),
   body: z.object({
     newAnnouncement: z.object({
       announcementText: z
