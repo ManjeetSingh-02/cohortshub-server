@@ -22,9 +22,9 @@ const router = Router();
 // @route GET /profile
 router.get('/profile', isLoggedIn, getUser);
 
-// @route PATCH /update-professional-profiles
+// @route PATCH /professional-profiles
 router.patch(
-  '/update-professional-profiles',
+  '/professional-profiles',
   isLoggedIn,
   validateSchema(updateUserProfessionalProfilesSchema),
   updateUserProfessionalProfiles
