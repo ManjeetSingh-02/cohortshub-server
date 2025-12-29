@@ -55,7 +55,8 @@ export const CSV_UPLOAD_CONFIG = {
   MAX_FILE_SIZE: 5 * 1024 * 1024, // 5 MB
   ALLOWED_MIME_TYPE: 'text/csv',
   FIELD_NAME: 'csvFiles',
-  FIELD_MAX_COUNT: 1,
+  MIN_FILE_COUNT: 1,
+  MAX_FILE_COUNT: 5,
 };
 
 // maximum limit of members in a group

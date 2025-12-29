@@ -15,9 +15,4 @@ export const uploadCSVFiles = multer({
   fileFilter: filterCSVType,
   limits: { fileSize: CSV_UPLOAD_CONFIG.MAX_FILE_SIZE },
   storage: multer.memoryStorage(),
-}).fields([
-  {
-    name: CSV_UPLOAD_CONFIG.FIELD_NAME,
-    maxCount: CSV_UPLOAD_CONFIG.MAX_FILE_COUNT,
-  },
-]);
+}).array(CSV_UPLOAD_CONFIG.FIELD_NAME, CSV_UPLOAD_CONFIG.MAX_FILE_COUNT);
