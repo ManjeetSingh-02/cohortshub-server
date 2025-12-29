@@ -64,7 +64,7 @@ export const getGroupDetails = asyncHandler(async (req, res) => {
   // fetch group from db
   const existingGroup = await Group.findById(req.group.id)
     .select(
-      '_id groupName createdBy groupMembersCount maximumMembersCount roleRequirements groupAnnouncements'
+      '_id groupName createdBy groupMembersCount maximumMembersCount roleRequirements groupAnnouncement'
     )
     .populate('createdBy', '_id username')
     .populate({
@@ -88,7 +88,7 @@ export const updateGroupRoleRequirements = asyncHandler(async (req, res) => {
   const updatedGroup = await Group.findByIdAndUpdate(
     req.group.id,
     {
-      roleRequirements: req.body.roleRequirements,
+      roleRequirements: req.body.newRoleRequirements,
     },
     { runValidators: true, new: true }
   );
@@ -106,13 +106,13 @@ export const updateGroupRoleRequirements = asyncHandler(async (req, res) => {
   );
 });
 
-// @controller PATCH /:groupName/announcements
-export const updateGroupAnnouncements = asyncHandler(async (req, res) => {
+// @controller PATCH /:groupName/announcement
+export const updateGroupAnnouncement = asyncHandler(async (req, res) => {
   // push new announcement group's announcement array field
   const updatedGroup = await Group.findByIdAndUpdate(
     req.group.id,
     {
-      $push: { groupAnnouncements: req.body.newAnnouncement },
+      groupAnnouncement: req.body.newAnnouncement,
     },
     { runValidators: true, new: true }
   );

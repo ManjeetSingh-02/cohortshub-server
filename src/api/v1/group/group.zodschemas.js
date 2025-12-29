@@ -16,7 +16,7 @@ export const createGroupSchema = z.object({
 // zod schema for updateGroupRoleRequirements
 export const updateGroupRoleRequirementsSchema = z.object({
   body: z.object({
-    roleRequirements: z.array(
+    newRoleRequirements: z.array(
       z.object({
         roleName: z.string().trim().nonempty({ error: 'Atleast one roleName is required' }),
         techStack: z
@@ -35,8 +35,8 @@ export const updateGroupRoleRequirementsSchema = z.object({
   }),
 });
 
-// zod schema for updateGroupAnnouncements
-export const updateGroupAnnouncementsSchema = z.object({
+// zod schema for updateGroupAnnouncement
+export const updateGroupAnnouncementSchema = z.object({
   body: z.object({
     newAnnouncement: z.object({
       announcementText: z

@@ -4,27 +4,6 @@ import { MAX_GROUP_MEMBERS } from '../utils/constants.js';
 // import external modules
 import mongoose from 'mongoose';
 
-// schema for tech stack
-const techStackSchema = new mongoose.Schema(
-  {
-    skillName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    experienceInMonths: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-    isMandatory: {
-      type: Boolean,
-      required: true,
-    },
-  },
-  { _id: false }
-);
-
 // schema for role requirement
 const roleRequirementSchema = new mongoose.Schema(
   {
@@ -34,42 +13,28 @@ const roleRequirementSchema = new mongoose.Schema(
       trim: true,
     },
     techStack: {
-      type: [techStackSchema],
+      type: [
+        {
+          skillName: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+          experienceInMonths: {
+            type: Number,
+            required: true,
+            min: 1,
+          },
+          isMandatory: {
+            type: Boolean,
+            required: true,
+          },
+        },
+      ],
       required: true,
     },
   },
   { _id: false }
-);
-
-// schema for group announcements
-const announcementSchema = new mongoose.Schema(
-  {
-    announcementText: {
-      type: String,
-      required: true,
-      trim: true,
-      minLength: 10,
-      maxLength: 500,
-    },
-    announcementResources: {
-      type: [
-        {
-          resourceName: {
-            type: String,
-            required: true,
-            trim: true,
-          },
-          resourceURL: {
-            type: String,
-            required: true,
-            trim: true,
-          },
-        },
-      ],
-      default: [],
-    },
-  },
-  { _id: false, timestamps: true }
 );
 
 // schema for group
@@ -99,9 +64,34 @@ const groupSchema = new mongoose.Schema(
       type: [roleRequirementSchema],
       default: [],
     },
-    groupAnnouncements: {
-      type: [announcementSchema],
-      default: [],
+    groupAnnouncement: {
+      type: {
+        announcementText: {
+          type: String,
+          required: true,
+          trim: true,
+          minLength: 10,
+          maxLength: 500,
+        },
+        announcementResources: {
+          type: [
+            {
+              resourceName: {
+                type: String,
+                required: true,
+                trim: true,
+              },
+              resourceURL: {
+                type: String,
+                required: true,
+                trim: true,
+              },
+            },
+          ],
+          default: [],
+        },
+      },
+      default: null,
     },
     associatedCohort: {
       type: mongoose.Schema.Types.ObjectId,

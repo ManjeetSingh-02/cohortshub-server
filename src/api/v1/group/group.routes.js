@@ -2,7 +2,7 @@
 import {
   createGroup,
   getGroupDetails,
-  updateGroupAnnouncements,
+  updateGroupAnnouncement,
   updateGroupRoleRequirements,
 } from './group.controllers.js';
 import {
@@ -15,7 +15,7 @@ import {
 } from '../../../utils/route-protectors/index.js';
 import {
   createGroupSchema,
-  updateGroupAnnouncementsSchema,
+  updateGroupAnnouncementSchema,
   updateGroupRoleRequirementsSchema,
 } from './group.zodschemas.js';
 import applicationRouter from '../application/application.routes.js';
@@ -47,13 +47,13 @@ router.patch(
   updateGroupRoleRequirements
 );
 
-// @route PATCH /:groupName/announcements
+// @route PATCH /:groupName/announcement
 router.patch(
-  '/:groupName/announcements',
+  '/:groupName/announcement',
   doesGroupExistInCohort,
   isUserGroupAdmin,
-  validateSchema(updateGroupAnnouncementsSchema),
-  updateGroupAnnouncements
+  validateSchema(updateGroupAnnouncementSchema),
+  updateGroupAnnouncement
 );
 
 // @route /:groupName/applications
