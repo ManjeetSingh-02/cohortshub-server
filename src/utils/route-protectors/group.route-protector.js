@@ -10,7 +10,7 @@ export const isUserAlreadyInAGroup = asyncHandler(async (req, _, next) => {
   if (req.user.currentGroup)
     throw new APIErrorResponse(409, {
       type: 'Group Membership Error',
-      message: 'User is already in a group, cannot join another group',
+      message: 'User is already in a group, cannot join/create another group',
     });
 
   // forward request to next middleware

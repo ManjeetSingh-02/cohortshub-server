@@ -11,6 +11,7 @@ import {
   validateSchema,
   isUserGroupAdmin,
   doesGroupExistInCohort,
+  userAlreadyHasUnderReviewApplication,
 } from '../../../utils/route-protectors/index.js';
 import {
   createGroupSchema,
@@ -26,7 +27,13 @@ import { Router } from 'express';
 const router = Router({ mergeParams: true });
 
 // @route POST /
-router.post('/', isUserAlreadyInAGroup, validateSchema(createGroupSchema), createGroup);
+router.post(
+  '/',
+  isUserAlreadyInAGroup,
+  userAlreadyHasUnderReviewApplication,
+  validateSchema(createGroupSchema),
+  createGroup
+);
 
 // @route GET /:groupName
 router.get('/:groupName', doesGroupExistInCohort, isUserAllowedInGroup, getGroupDetails);

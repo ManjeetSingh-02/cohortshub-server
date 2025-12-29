@@ -38,7 +38,7 @@ export const userAlreadyHasUnderReviewApplication = asyncHandler(async (req, _, 
     throw new APIErrorResponse(400, {
       type: 'Pending Application Error',
       message:
-        'User already has a pending application, please wait for it to be reviewed or withdraw it before applying again.',
+        'User already has a application which is under review, please wait for it to be reviewed or withdraw it before applying to a group or creating a new group',
     });
 
   // forward request to next middleware
