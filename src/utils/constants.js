@@ -1,6 +1,16 @@
 // import local modules
 import { envConfig } from './env.js';
 
+// all node environments
+export const NODE_ENVS = {
+  DEVELOPMENT: 'development',
+  TESTING: 'testing',
+  PRODUCTION: 'production',
+};
+
+// allowed node environments
+export const ALLOWED_NODE_ENVS = Object.values(NODE_ENVS);
+
 // google OAuth constants
 export const GOOGLE_OAUTH_CONFIG = {
   AUTH_URI: 'https://accounts.google.com/o/oauth2/v2/auth',
@@ -16,7 +26,7 @@ export const OAUTH_COOKIE_CONFIG = {
   NONCE_NAME: 'oauthNonce',
   OPTIONS: {
     httpOnly: true,
-    secure: envConfig.NODE_ENV === 'production',
+    secure: envConfig.NODE_ENV === NODE_ENVS.PRODUCTION,
     signed: true,
     sameSite: 'Lax',
     maxAge: 5 * 60 * 1000,
@@ -34,8 +44,8 @@ export const REFRESH_TOKEN_COOKIE_CONFIG = {
   NAME: 'refreshToken',
   OPTIONS: {
     httpOnly: true,
-    secure: envConfig.NODE_ENV === 'production',
-    sameSite: envConfig.NODE_ENV === 'production' ? 'None' : 'Lax',
+    secure: envConfig.NODE_ENV === NODE_ENVS.PRODUCTION,
+    sameSite: envConfig.NODE_ENV === NODE_ENVS.PRODUCTION ? 'None' : 'Lax',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   },
 };

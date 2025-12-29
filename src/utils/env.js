@@ -1,5 +1,6 @@
 // import package modules
 import { z } from 'zod';
+import { ALLOWED_NODE_ENVS } from './constants.js';
 
 // config for environment variables
 export const envConfig = {
@@ -17,16 +18,16 @@ export const envConfig = {
 
 // zod schema for environment variables
 const envSchema = z.object({
-  ORIGIN_URL: z.url({ message: 'ORIGIN_URL must be a valid URL' }),
+  ORIGIN_URL: z.url({ error: 'ORIGIN_URL must be a valid URL' }),
   PORT: z.number().int().positive(),
-  MONGODB_URI: z.url({ message: 'MONGO_URI must be a valid MongoDB URI' }),
-  NODE_ENV: z.enum(['development', 'testing', 'production']),
-  COOKIE_SECRET: z.string().min(32, { message: 'COOKIE_SECRET must be 32 chars' }),
-  ACCESS_TOKEN_SECRET: z.string().min(32, { message: 'ACCESS_TOKEN_SECRET must be 32 chars' }),
-  REFRESH_TOKEN_SECRET: z.string().min(32, { message: 'REFRESH_TOKEN_SECRET must be 32 chars' }),
-  GOOGLE_CLIENT_ID: z.string().nonempty({ message: 'GOOGLE_CLIENT_ID is required' }),
-  GOOGLE_CLIENT_SECRET: z.string().nonempty({ message: 'GOOGLE_CLIENT_SECRET is required' }),
-  GOOGLE_REDIRECT_URI: z.url({ message: 'GOOGLE_REDIRECT_URI must be a valid URL' }),
+  MONGODB_URI: z.url({ error: 'MONGO_URI must be a valid MongoDB URI' }),
+  NODE_ENV: z.enum(ALLOWED_NODE_ENVS),
+  COOKIE_SECRET: z.string().min(32, { error: 'COOKIE_SECRET must be 32 chars' }),
+  ACCESS_TOKEN_SECRET: z.string().min(32, { error: 'ACCESS_TOKEN_SECRET must be 32 chars' }),
+  REFRESH_TOKEN_SECRET: z.string().min(32, { error: 'REFRESH_TOKEN_SECRET must be 32 chars' }),
+  GOOGLE_CLIENT_ID: z.string().trim().nonempty({ error: 'GOOGLE_CLIENT_ID is required' }),
+  GOOGLE_CLIENT_SECRET: z.string().trim().nonempty({ error: 'GOOGLE_CLIENT_SECRET is required' }),
+  GOOGLE_REDIRECT_URI: z.url({ error: 'GOOGLE_REDIRECT_URI must be a valid URL' }),
 });
 
 // function to validate environment variables
