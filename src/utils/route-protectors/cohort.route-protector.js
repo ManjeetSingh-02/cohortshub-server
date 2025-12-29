@@ -2,6 +2,7 @@
 import { APIErrorResponse } from '../../api/response.api.js';
 import { asyncHandler } from '../async-handler.js';
 import { Cohort } from '../../models/index.js';
+import { USER_ROLES } from '../constants.js';
 
 // function to check if cohort exists
 export const doesCohortExist = asyncHandler(async (req, _, next) => {
@@ -30,7 +31,10 @@ export const doesCohortExist = asyncHandler(async (req, _, next) => {
 // function to check if user is allowed in the cohort
 export const isUserAllowedInCohort = asyncHandler(async (req, _, next) => {
   // check if user's email is not in the allowed-user-emails list of the cohort
-  if (!req.cohort.allowedUserEmails.includes(req.user.email))
+  if (
+    req.user.role !== USER_ROLES.SYSTEM_ADMIN &&
+    !req.cohort.allowedUserEmails.includes(req.user.email)
+  )
     throw new APIErrorResponse(403, {
       type: 'Cohort Authorization Error',
       message: `User with email '${req.user.email}' is not allowed in cohort '${req.params.cohortName}'`,
