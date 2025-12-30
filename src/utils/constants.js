@@ -20,8 +20,8 @@ export const GOOGLE_OAUTH_CONFIG = {
 // export OAuthToken expiry duration(5 mins)
 export const OAUTH_TOKEN_LIFETIME = 5 * 60 * 1000;
 
-// export accessToken expiry duration(5 mins)
-export const ACCESS_TOKEN_LIFETIME = 5 * 60 * 1000;
+// export accessToken expiry duration(15 mins)
+export const ACCESS_TOKEN_LIFETIME = 15 * 60 * 1000;
 
 // export refreshToken expiry duration (24 hrs)
 export const REFRESH_TOKEN_LIFETIME = 24 * 60 * 60 * 1000;
