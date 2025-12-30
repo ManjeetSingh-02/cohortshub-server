@@ -105,6 +105,13 @@ userSchema.virtual('enrolledCohorts', {
   foreignField: 'allowedUserEmails',
 });
 
+// virtual field to get all applications submitted by the user
+userSchema.virtual('groupApplications', {
+  ref: 'Application',
+  localField: '_id',
+  foreignField: 'applicantDetails.associatedUser',
+});
+
 // set virtuals to be included in toObject and toJSON outputs
 userSchema.set('toObject', { virtuals: true });
 userSchema.set('toJSON', { virtuals: true });

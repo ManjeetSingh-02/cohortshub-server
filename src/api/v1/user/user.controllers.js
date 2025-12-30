@@ -14,6 +14,25 @@ export const getUser = asyncHandler(async (req, res) => {
       path: 'enrolledCohorts',
       select: '_id cohortName -allowedUserEmails',
     })
+    .populate({
+      path: 'groupApplications',
+      select:
+        '_id associatedCohort associatedGroup applicationStatus applicantDetails.applicantPitch applicantDetails.applicantResources applicantDetails.applicantSkills applicationReviewerDetails createdAt updatedAt -applicantDetails.associatedUser',
+      populate: [
+        {
+          path: 'associatedCohort',
+          select: '_id cohortName',
+        },
+        {
+          path: 'associatedGroup',
+          select: '_id groupName',
+        },
+        {
+          path: 'applicationReviewerDetails.associatedUser',
+          select: '_id username',
+        },
+      ],
+    })
     .lean();
   if (!existingUser)
     throw new APIErrorResponse(404, {
