@@ -67,6 +67,7 @@ const applicationReviewerSchema = new mongoose.Schema(
     applicationReviewerID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+      default: null,
     },
     applicationReviewerFeedback: {
       type: String,
@@ -98,7 +99,7 @@ const applicationSchema = new mongoose.Schema(
     },
     applicationReviewerDetails: {
       type: applicationReviewerSchema,
-      required: true,
+      default: {},
     },
     applicationStatus: {
       type: String,
