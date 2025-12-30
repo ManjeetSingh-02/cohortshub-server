@@ -37,6 +37,37 @@ const roleRequirementSchema = new mongoose.Schema(
   { _id: false }
 );
 
+// schema for group announcement
+const groupAnnouncementSchema = new mongoose.Schema(
+  {
+    announcementText: {
+      type: String,
+      required: true,
+      trim: true,
+      minLength: 10,
+      maxLength: 500,
+    },
+    announcementResources: {
+      type: [
+        {
+          resourceName: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+          resourceURL: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+        },
+      ],
+      default: [],
+    },
+  },
+  { _id: false }
+);
+
 // schema for group
 const groupSchema = new mongoose.Schema(
   {
@@ -65,32 +96,7 @@ const groupSchema = new mongoose.Schema(
       default: [],
     },
     groupAnnouncement: {
-      type: {
-        announcementText: {
-          type: String,
-          required: true,
-          trim: true,
-          minLength: 10,
-          maxLength: 500,
-        },
-        announcementResources: {
-          type: [
-            {
-              resourceName: {
-                type: String,
-                required: true,
-                trim: true,
-              },
-              resourceURL: {
-                type: String,
-                required: true,
-                trim: true,
-              },
-            },
-          ],
-          default: [],
-        },
-      },
+      type: groupAnnouncementSchema,
       default: null,
     },
     associatedCohort: {
