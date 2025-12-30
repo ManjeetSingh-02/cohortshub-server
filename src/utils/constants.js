@@ -17,6 +17,9 @@ export const GOOGLE_OAUTH_CONFIG = {
   SCOPE_GRANT_TYPE: 'authorization_code',
 };
 
+// export OAuthToken expiry duration(5 mins)
+export const OAUTH_TOKEN_LIFETIME = 5 * 60 * 1000;
+
 // export accessToken expiry duration(5 mins)
 export const ACCESS_TOKEN_LIFETIME = 5 * 60 * 1000;
 
@@ -32,7 +35,7 @@ export const OAUTH_COOKIE_CONFIG = {
     secure: envConfig.NODE_ENV === NODE_ENVS.PRODUCTION,
     signed: true,
     sameSite: 'Lax',
-    maxAge: ACCESS_TOKEN_LIFETIME,
+    maxAge: OAUTH_TOKEN_LIFETIME,
   },
 };
 
