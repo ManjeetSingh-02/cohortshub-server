@@ -25,10 +25,10 @@ export const postApplication = asyncHandler(async (req, res) => {
     await Application.create(
       [
         {
-          cohortID: req.cohort.id,
-          groupID: req.group.id,
+          associatedCohort: req.cohort.id,
+          associatedGroup: req.group.id,
           applicantDetails: {
-            applicantID: req.user.id,
+            associatedUser: req.user.id,
             applicantPitch: req.body.applicantPitch,
             applicantResources: req.body.applicantResources,
             applicantSkills: req.body.applicantSkills,
