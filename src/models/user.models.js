@@ -87,14 +87,14 @@ const userSchema = new mongoose.Schema(
 // method to generateAccessToken
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign({ id: this._id }, envConfig.ACCESS_TOKEN_SECRET, {
-    expiresIn: ACCESS_TOKEN_LIFETIME,
+    expiresIn: ACCESS_TOKEN_LIFETIME / 1000, // jwt takes expiresIn in seconds so /1000
   });
 };
 
 // method to generateRefreshToken
 userSchema.methods.generateRefreshToken = function () {
   return jwt.sign({ id: this._id }, envConfig.REFRESH_TOKEN_SECRET, {
-    expiresIn: REFRESH_TOKEN_LIFETIME,
+    expiresIn: REFRESH_TOKEN_LIFETIME / 1000, // jwt takes expiresIn in seconds so /1000
   });
 };
 
