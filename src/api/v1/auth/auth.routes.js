@@ -23,7 +23,7 @@ router.get('/login/google/callback', googleLoginCallback);
 router.get('/logout', isLoggedIn, googleLogout);
 
 // @route PATCH /token/refresh
-router.get('/token/refresh', refreshTokens);
+router.patch('/token/refresh', refreshTokens);
 
 // export router
 export default router;

@@ -12,6 +12,7 @@ import { Cohort, User } from '../../../models/index.js';
 // import external modules
 import crypto from 'crypto';
 import { OAuth2Client } from 'google-auth-library';
+import jwt from 'jsonwebtoken';
 
 // OAuth2 Client initialization
 const OAuth2ClientInstance = new OAuth2Client(
@@ -19,11 +20,6 @@ const OAuth2ClientInstance = new OAuth2Client(
   envConfig.GOOGLE_CLIENT_SECRET,
   envConfig.GOOGLE_REDIRECT_URI
 );
-
-// sub-function to generateTemporaryToken
-function generateTemporaryToken(length) {
-  return crypto.randomBytes(length).toString('hex');
-}
 
 // @controller GET /login/google
 export const googleLogin = asyncHandler(async (_, res) => {
@@ -189,6 +185,11 @@ export const refreshTokens = asyncHandler(async (req, res) => {
       })
     );
 });
+
+// sub-function to generateTemporaryToken
+function generateTemporaryToken(length) {
+  return crypto.randomBytes(length).toString('hex');
+}
 
 // sub-function to handle login and registration flow for Google OAuth2
 async function handleGoogleLogin(userDetails) {
