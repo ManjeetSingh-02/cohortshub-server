@@ -71,6 +71,21 @@ export const getGroupDetails = asyncHandler(async (req, res) => {
       path: 'currentGroupMembers',
       select: '_id username -currentGroup',
     })
+    .populate({
+      path: 'groupApplications',
+      select:
+        '_id applicationStatus applicantDetails.associatedUser applicantDetails.applicantPitch applicantDetails.applicantResources applicantDetails.applicantSkills applicationReviewerDetails createdAt updatedAt -associatedCohort -associatedGroup',
+      populate: [
+        {
+          path: 'applicantDetails.associatedUser',
+          select: '_id username',
+        },
+        {
+          path: 'applicationReviewerDetails.associatedUser',
+          select: '_id username',
+        },
+      ],
+    })
     .lean();
 
   // send success status to user
