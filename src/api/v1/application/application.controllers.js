@@ -11,15 +11,8 @@ export const postApplication = asyncHandler(async (req, res) => {
     // fetch group from db
     const existingGroup = await Group.findById(req.group.id)
       .session(mongooseSession)
-      .select('createdBy maximumMembersCount groupMembersCount')
+      .select('maximumMembersCount groupMembersCount')
       .lean();
-
-    // check if user is trying to apply to their own group
-    if (String(existingGroup.createdBy) === String(req.user.id))
-      throw new APIErrorResponse(400, {
-        type: 'Create Application Error',
-        message: 'Group creators cannot apply to their own groups',
-      });
 
     // check if group is already full
     if (existingGroup.groupMembersCount === existingGroup.maximumMembersCount)
