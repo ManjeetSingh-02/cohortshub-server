@@ -120,13 +120,6 @@ groupSchema.virtual('currentGroupMembers', {
   foreignField: 'currentGroup',
 });
 
-// virtual field to get all applications submitted to the group
-groupSchema.virtual('groupApplications', {
-  ref: 'Application',
-  localField: '_id',
-  foreignField: 'associatedGroup',
-});
-
 // set virtuals to be included in toObject and toJSON outputs
 groupSchema.set('toObject', { virtuals: true });
 groupSchema.set('toJSON', { virtuals: true });
