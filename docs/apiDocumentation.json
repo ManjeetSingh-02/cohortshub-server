@@ -1,0 +1,22 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ChaiHub-Server API Documentation",
+    "description": "Interactive API reference for ChaiHub-Server",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Manjeet Singh",
+      "url": "https://github.com/ManjeetSingh-02",
+      "email": "manjeetsingh.wrk@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {},
+  "components": {},
+  "tags": []
+}
