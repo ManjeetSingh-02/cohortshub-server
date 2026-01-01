@@ -8,7 +8,7 @@
     "dev": "npm run system_admin:check && nodemon --env-file=.env src/index.js",
     "system_admin:check": "node --env-file=.env src/utils/system-scripts/checkSystemAdmin.js",
     "system_admin:init": "node --env-file=.env src/utils/system-scripts/initializeSystemAdmin.js",
-    "api_docs_json:generate": "node src/utils/system-scripts/generateAPIDocumentation.js",
+    "generate:docs": "node src/utils/system-scripts/generateAPIDocs.js",
     "format": "prettier --write ."
   },
   "repository": {
@@ -35,8 +35,8 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "express-jsdoc-swagger": "^1.8.0",
     "nodemon": "^3.1.11",
-    "prettier": "^3.7.4",
-    "swagger-jsdoc": "^6.2.8"
+    "prettier": "^3.7.4"
   }
 }
