@@ -13,8 +13,9 @@ export const GOOGLE_OAUTH_CONFIG = {
   AUTH_URI: 'https://accounts.google.com/o/oauth2/v2/auth',
   TOKEN_URI: 'https://oauth2.googleapis.com/token',
   USERINFO_URI: 'https://www.googleapis.com/oauth2/v2/userinfo',
-  DEFAULT_SCOPES: 'openid email profile',
+  DEFAULT_SCOPES: 'openid email',
   SCOPE_GRANT_TYPE: 'authorization_code',
+  VALID_ISSUERS: ['https://accounts.google.com', 'accounts.google.com'],
 };
 
 // export OAuthToken expiry duration(5 mins)

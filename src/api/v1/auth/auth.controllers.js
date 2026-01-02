@@ -62,9 +62,9 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
     res.clearCookie(OAUTH_COOKIE_CONFIG.NONCE_NAME);
 
     // throw error for token fetch failure
-    throw new APIErrorResponse(500, {
+    throw new APIErrorResponse(502, {
       type: 'Google Login Callback Error',
-      message: 'Something went wrong while fetching tokens from Google',
+      message: 'Failed to fetch tokens from Google',
     });
   }
 
@@ -97,7 +97,44 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   if (!ticketPayload)
     throw new APIErrorResponse(500, {
       type: 'Google Login Callback Error',
-      message: 'Failed to verify from Google',
+      message: 'Failed to verify Google identity token',
+    });
+
+  if (
+    typeof ticketPayload.iss !== 'string' ||
+    !GOOGLE_OAUTH_CONFIG.VALID_ISSUERS.includes(ticketPayload.iss.trim())
+  )
+    throw new APIErrorResponse(401, {
+      type: 'Google Login Callback Error',
+      message: 'Invalid token issuer',
+    });
+
+  // check if audience is valid
+  if (ticketPayload.aud !== envConfig.GOOGLE_CLIENT_ID)
+    throw new APIErrorResponse(401, {
+      type: 'Google Login Callback Error',
+      message: 'Invalid Google token audience',
+    });
+
+  // check if sub exists
+  if (typeof ticketPayload.sub !== 'string' || !ticketPayload.sub.trim())
+    throw new APIErrorResponse(401, {
+      type: 'Google Login Callback Error',
+      message: 'Invalid Google identity token',
+    });
+
+  // check if email exists
+  if (typeof ticketPayload.email !== 'string' || !ticketPayload.email.trim())
+    throw new APIErrorResponse(401, {
+      type: 'Google Login Callback Error',
+      message: 'Google account email not found',
+    });
+
+  // check if email is verified
+  if (ticketPayload.email_verified !== true)
+    throw new APIErrorResponse(403, {
+      type: 'Google Login Callback Error',
+      message: 'Google account email is not verified',
     });
 
   // extract user info from ticket payload
