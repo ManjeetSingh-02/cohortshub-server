@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "ChaiHub-Server API Documentation",
-    "description": "Interactive API reference for ChaiHub-Server",
+    "title": "CohortsHub-Server API Documentation",
+    "description": "Interactive API reference for CohortsHub-Server",
     "contact": {
       "name": "Manjeet Singh",
       "url": "https://github.com/ManjeetSingh-02",

@@ -23,8 +23,8 @@ import path from 'path';
         email: 'manjeetsingh.wrk@gmail.com',
         url: 'https://github.com/ManjeetSingh-02',
       },
-      description: 'Interactive API reference for ChaiHub-Server',
-      title: 'ChaiHub-Server API Documentation',
+      description: 'Interactive API reference for CohortsHub-Server',
+      title: 'CohortsHub-Server API Documentation',
       version: '1.0.0',
     },
     security: {

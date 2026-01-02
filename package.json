@@ -1,7 +1,7 @@
 {
-  "name": "chaihub-server",
+  "name": "cohortshub-server",
   "version": "1.0.0",
-  "description": "Server API's for ChaiHub Application",
+  "description": "Server API's for CohortsHub Application",
   "main": "index.js",
   "scripts": {
     "start": "npm run system_admin:check && node --env-file=.env src/index.js",
