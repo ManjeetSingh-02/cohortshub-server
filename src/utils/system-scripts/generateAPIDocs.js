@@ -27,6 +27,14 @@ import path from 'path';
       title: 'ChaiHub-Server API Documentation',
       version: '1.0.0',
     },
+    security: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter your JWT token in the format: Bearer <token>',
+      },
+    },
     servers: [
       {
         url: 'http://localhost:3000/api/v1',
