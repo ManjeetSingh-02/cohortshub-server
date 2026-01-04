@@ -13,16 +13,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ManjeetSingh-02/group-finder-server.git"
+    "url": "git+https://github.com/ManjeetSingh-02/cohortshub-server.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "bugs": {
-    "url": "https://github.com/ManjeetSingh-02/group-finder-server/issues"
+    "url": "https://github.com/ManjeetSingh-02/cohortshub-server/issues"
   },
-  "homepage": "https://github.com/ManjeetSingh-02/group-finder-server#readme",
+  "homepage": "https://github.com/ManjeetSingh-02/cohortshub-server#readme",
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
