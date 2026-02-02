@@ -2,14 +2,13 @@
   "name": "cohortshub-server",
   "version": "1.0.0",
   "description": "Server API's for CohortsHub Application",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "npm run system_admin:check && node --env-file=.env src/index.js",
-    "dev": "npm run system_admin:check && nodemon --env-file=.env src/index.js",
+    "start": "node --env-file=.env src/utils/system-scripts/checkSystemAdmin.js && node --env-file=.env src/index.js",
+    "dev": "node --env-file=.env src/utils/system-scripts/checkSystemAdmin.js && nodemon --env-file=.env src/index.js",
     "system_admin:check": "node --env-file=.env src/utils/system-scripts/checkSystemAdmin.js",
     "system_admin:init": "node --env-file=.env src/utils/system-scripts/initializeSystemAdmin.js",
-    "generate:docs": "node src/utils/system-scripts/generateAPIDocs.js",
-    "format": "prettier --write ."
+    "generate:docs": "node src/utils/system-scripts/generateAPIDocs.js"
   },
   "repository": {
     "type": "git",
