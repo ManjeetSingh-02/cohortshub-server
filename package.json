@@ -23,6 +23,7 @@
     "url": "https://github.com/ManjeetSingh-02/cohortshub-server/issues"
   },
   "homepage": "https://github.com/ManjeetSingh-02/cohortshub-server#readme",
+  "packageManager": "pnpm@10.28.2",
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
