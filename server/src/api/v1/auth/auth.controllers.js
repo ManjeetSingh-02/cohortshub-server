@@ -33,7 +33,7 @@ export const googleLogin = asyncHandler(async (_, res) => {
 
   // redirect user to Google's OAuth2 consent page
   return res.redirect(
-    `${GOOGLE_OAUTH_CONFIG.AUTH_URI}?client_id=${envConfig.GOOGLE_CLIENT_ID}&redirect_uri=${envConfig.GOOGLE_REDIRECT_URI}&response_type=code&scope=${encodeURIComponent(GOOGLE_OAUTH_CONFIG.DEFAULT_SCOPES)}&prompt=select_account&state=${authState}&nonce=${authNonce}`
+    `${GOOGLE_OAUTH_CONFIG.AUTH_URI}?client_id=${envConfig.GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(envConfig.GOOGLE_REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(GOOGLE_OAUTH_CONFIG.DEFAULT_SCOPES)}&prompt=select_account&state=${authState}&nonce=${authNonce}`
   );
 });
 
