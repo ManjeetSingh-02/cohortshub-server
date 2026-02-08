@@ -143,21 +143,14 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
     email: String(ticketPayload.email).toLowerCase(),
   };
 
-  // handle googleLogin, retrieve tokens
-  const { accessToken, refreshToken } = await handleGoogleLogin(userDetails);
+  // handle googleLogin, retrieve refreshToken
+  const { refreshToken } = await handleGoogleLogin(userDetails);
 
-  // success status to user
   // save refreshToken in httpOnly cookie
-  // send accessToken in response
+  // redirect user to origin URL
   return res
-    .status(200)
     .cookie(REFRESH_TOKEN_COOKIE_CONFIG.NAME, refreshToken, REFRESH_TOKEN_COOKIE_CONFIG.OPTIONS)
-    .json(
-      new APISuccessResponse(200, {
-        message: 'Google Login Successful',
-        data: { accessToken },
-      })
-    );
+    .redirect(envConfig.ORIGIN_URL);
 });
 
 // @controller GET /logout
