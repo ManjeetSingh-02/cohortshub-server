@@ -1,3 +1,5 @@
+// Load env variables before rendering the app to ensure their availability throughout the app
+import '@/lib/env';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
