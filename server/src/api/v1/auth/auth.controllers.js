@@ -175,22 +175,15 @@ export const refreshTokens = asyncHandler(async (req, res) => {
   if (!oldRefreshToken)
     throw new APIErrorResponse(401, {
       type: 'Token Refresh Error',
-      message: 'No refresh token provided',
+      message: 'Refresh token is invalid',
     });
 
-  // decode old refresh token
-  const decodedToken = decodeRefreshToken(oldRefreshToken);
+  // verify old refresh token
+  const verifiedToken = verifyRefreshToken(oldRefreshToken);
 
-  // check if user exists
-  const existingUser = await User.findById(decodedToken?.id).select('refreshToken');
-  if (!existingUser)
-    throw new APIErrorResponse(404, {
-      type: 'Token Refresh Error',
-      message: 'User associated with this token no longer exists',
-    });
-
-  // compare oldRefreshToken with the one in db
-  if (existingUser.refreshToken !== oldRefreshToken)
+  // check if user exists and compare oldRefreshToken with the one in db
+  const existingUser = await User.findById(verifiedToken?.id).select('refreshToken');
+  if (!existingUser || existingUser.refreshToken !== oldRefreshToken)
     throw new APIErrorResponse(401, {
       type: 'Token Refresh Error',
       message: 'Refresh token is invalid',
@@ -297,22 +290,14 @@ function generateRandomSuffix() {
     .padStart(4, '0');
 }
 
-// sub-function to decode refresh token
-function decodeRefreshToken(refreshToken) {
+// sub-function to verify refresh token
+function verifyRefreshToken(refreshToken) {
   try {
     return jwt.verify(refreshToken, envConfig.REFRESH_TOKEN_SECRET);
   } catch (error) {
-    // if token is expired, throw a token expired error
-    if (error.name === 'TokenExpiredError')
-      throw new APIErrorResponse(401, {
-        type: 'Refresh Token Expired Error',
-        message: 'Refresh Token expired, please login again',
-      });
-
-    // for any other error, throw a generic invalid token error
     throw new APIErrorResponse(401, {
-      type: 'Refresh Token Error',
-      message: 'Invalid Refresh Token',
+      type: 'Token Refresh Error',
+      message: 'Refresh Token is invalid',
     });
   }
 }
