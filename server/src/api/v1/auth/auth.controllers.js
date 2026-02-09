@@ -297,7 +297,7 @@ function verifyRefreshToken(refreshToken) {
   } catch (error) {
     throw new APIErrorResponse(401, {
       type: 'Token Refresh Error',
-      message: 'Refresh Token is invalid',
+      message: 'Refresh token is invalid',
     });
   }
 }
