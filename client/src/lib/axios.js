@@ -13,11 +13,9 @@ export const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   // modify the request config before sending the request
   config => {
-    // get accessToken from authStore
-    const { accessToken } = useAuthStore.getState();
-
     // add Authorization header if accessToken exists
-    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+    if (useAuthStore.getState().accessToken)
+      config.headers.Authorization = `Bearer ${useAuthStore.getState().accessToken}`;
 
     // return the config
     return config;
@@ -47,17 +45,13 @@ axiosInstance.interceptors.response.use(
 
     try {
       // send a request to refresh the access token
-      const refreshTokenRequestResponse = await axiosInstance.patch('/auth/token/refresh');
-
-      // get the new access token from the refreshTokenRequestResponse
-      const newAccessToken = refreshTokenRequestResponse.response.data.accessToken;
+      const data = await axiosInstance.patch('/auth/token/refresh');
 
       // update the new access token in authStore
-      const { updateAccessToken } = useAuthStore.getState();
-      updateAccessToken(newAccessToken);
+      useAuthStore.getState().updateAccessToken(data.response.data.accessToken);
 
       // update the Authorization header in the original request config
-      originalRequestConfig.headers.Authorization = `Bearer ${newAccessToken}`;
+      originalRequestConfig.headers.Authorization = `Bearer ${data.response.data.accessToken}`;
 
       // resend the original request with the new access token
       return axiosInstance(originalRequestConfig);
@@ -69,7 +63,6 @@ axiosInstance.interceptors.response.use(
 
 // sub-function to clear accessToken from authStore and reject the error
 function clearAccessToken(error) {
-  const { clearAccessToken } = useAuthStore.getState();
-  clearAccessToken();
+  useAuthStore.getState().clearAccessToken();
   return Promise.reject(error);
 }
