@@ -1,10 +1,5 @@
 // import local modules
-import {
-  googleLogin,
-  googleLoginCallback,
-  googleLogout,
-  refreshTokens,
-} from './auth.controllers.js';
+import { googleLogin, googleLoginCallback, logout, refreshTokens } from './auth.controllers.js';
 import { isLoggedIn, isSessionActive } from '../../../utils/route-protectors/index.js';
 
 // import external modules
@@ -19,8 +14,8 @@ router.get('/login/google', isSessionActive, googleLogin);
 // @route GET /login/google/callback
 router.get('/login/google/callback', googleLoginCallback);
 
-// @route GET /logout
-router.get('/logout', isLoggedIn, googleLogout);
+// @route POST /logout
+router.post('/logout', isLoggedIn, logout);
 
 // @route PATCH /token/refresh
 router.patch('/token/refresh', refreshTokens);

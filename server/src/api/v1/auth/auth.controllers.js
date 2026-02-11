@@ -153,8 +153,8 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
     .redirect(envConfig.ORIGIN_URL);
 });
 
-// @controller GET /logout
-export const googleLogout = asyncHandler(async (req, res) => {
+// @controller POST /logout
+export const logout = asyncHandler(async (req, res) => {
   // get user from db and set refreshToken to null
   await User.findByIdAndUpdate(req.user.id, {
     refreshToken: null,
