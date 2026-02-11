@@ -2,7 +2,7 @@ import { axiosInstance } from '@/lib/axios';
 import { useAuthStore } from '@/stores/auth.store';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/(public)/')({
   beforeLoad: async () => {
     // get state and action from auth store
     const { accessToken, updateAccessToken } = useAuthStore.getState();

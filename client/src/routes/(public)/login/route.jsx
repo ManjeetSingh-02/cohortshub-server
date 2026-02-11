@@ -1,7 +1,7 @@
 import { useAuthStore } from '@/stores/auth.store';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute('/(public)/login')({
   beforeLoad: () => {
     // get state from the auth store
     const { accessToken } = useAuthStore.getState();
