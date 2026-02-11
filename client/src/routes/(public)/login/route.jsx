@@ -1,12 +1,11 @@
-import { useAuthStore } from '@/stores/auth.store';
+import { restoreSession } from '@/lib/restoreSession';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/(public)/login')({
   beforeLoad: () => {
-    // get state from the auth store
-    const { accessToken } = useAuthStore.getState();
+    const isAuthenticated = restoreSession();
 
-    // if accessToken exists, redirect to the home page
-    if (accessToken) throw redirect({ to: '/' });
+    // if the user is already authenticated, redirect to the cohorts page
+    if (isAuthenticated) throw redirect({ to: '/cohorts' });
   },
 });
