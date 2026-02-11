@@ -13,6 +13,7 @@ import { Route as protectedRouteRouteImport } from './routes/(protected)/route'
 import { Route as publicIndexRouteImport } from './routes/(public)/index'
 import { Route as publicLoginRouteRouteImport } from './routes/(public)/login/route'
 import { Route as publicLoginIndexRouteImport } from './routes/(public)/login/index'
+import { Route as protectedCohortsIndexRouteImport } from './routes/(protected)/cohorts/index'
 
 const protectedRouteRoute = protectedRouteRouteImport.update({
   id: '/(protected)',
@@ -33,38 +34,47 @@ const publicLoginIndexRoute = publicLoginIndexRouteImport.update({
   path: '/',
   getParentRoute: () => publicLoginRouteRoute,
 } as any)
+const protectedCohortsIndexRoute = protectedCohortsIndexRouteImport.update({
+  id: '/cohorts/',
+  path: '/cohorts/',
+  getParentRoute: () => protectedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof publicLoginRouteRouteWithChildren
   '/': typeof publicIndexRoute
+  '/cohorts/': typeof protectedCohortsIndexRoute
   '/login/': typeof publicLoginIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof publicIndexRoute
+  '/cohorts': typeof protectedCohortsIndexRoute
   '/login': typeof publicLoginIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(protected)': typeof protectedRouteRoute
+  '/(protected)': typeof protectedRouteRouteWithChildren
   '/(public)/login': typeof publicLoginRouteRouteWithChildren
   '/(public)/': typeof publicIndexRoute
+  '/(protected)/cohorts/': typeof protectedCohortsIndexRoute
   '/(public)/login/': typeof publicLoginIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/login' | '/' | '/login/'
+  fullPaths: '/login' | '/' | '/cohorts/' | '/login/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
+  to: '/' | '/cohorts' | '/login'
   id:
     | '__root__'
     | '/(protected)'
     | '/(public)/login'
     | '/(public)/'
+    | '/(protected)/cohorts/'
     | '/(public)/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  protectedRouteRoute: typeof protectedRouteRoute
+  protectedRouteRoute: typeof protectedRouteRouteWithChildren
   publicLoginRouteRoute: typeof publicLoginRouteRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
 }
@@ -99,8 +109,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicLoginIndexRouteImport
       parentRoute: typeof publicLoginRouteRoute
     }
+    '/(protected)/cohorts/': {
+      id: '/(protected)/cohorts/'
+      path: '/cohorts'
+      fullPath: '/cohorts/'
+      preLoaderRoute: typeof protectedCohortsIndexRouteImport
+      parentRoute: typeof protectedRouteRoute
+    }
   }
 }
+
+interface protectedRouteRouteChildren {
+  protectedCohortsIndexRoute: typeof protectedCohortsIndexRoute
+}
+
+const protectedRouteRouteChildren: protectedRouteRouteChildren = {
+  protectedCohortsIndexRoute: protectedCohortsIndexRoute,
+}
+
+const protectedRouteRouteWithChildren = protectedRouteRoute._addFileChildren(
+  protectedRouteRouteChildren,
+)
 
 interface publicLoginRouteRouteChildren {
   publicLoginIndexRoute: typeof publicLoginIndexRoute
@@ -114,7 +143,7 @@ const publicLoginRouteRouteWithChildren =
   publicLoginRouteRoute._addFileChildren(publicLoginRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  protectedRouteRoute: protectedRouteRoute,
+  protectedRouteRoute: protectedRouteRouteWithChildren,
   publicLoginRouteRoute: publicLoginRouteRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
 }
