@@ -9,10 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as protectedRouteRouteImport } from './routes/(protected)/route'
 import { Route as publicIndexRouteImport } from './routes/(public)/index'
 import { Route as publicLoginRouteRouteImport } from './routes/(public)/login/route'
 import { Route as publicLoginIndexRouteImport } from './routes/(public)/login/index'
 
+const protectedRouteRoute = protectedRouteRouteImport.update({
+  id: '/(protected)',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const publicIndexRoute = publicIndexRouteImport.update({
   id: '/(public)/',
   path: '/',
@@ -40,6 +45,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/(protected)': typeof protectedRouteRoute
   '/(public)/login': typeof publicLoginRouteRouteWithChildren
   '/(public)/': typeof publicIndexRoute
   '/(public)/login/': typeof publicLoginIndexRoute
@@ -49,16 +55,29 @@ export interface FileRouteTypes {
   fullPaths: '/login' | '/' | '/login/'
   fileRoutesByTo: FileRoutesByTo
   to: '/' | '/login'
-  id: '__root__' | '/(public)/login' | '/(public)/' | '/(public)/login/'
+  id:
+    | '__root__'
+    | '/(protected)'
+    | '/(public)/login'
+    | '/(public)/'
+    | '/(public)/login/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  protectedRouteRoute: typeof protectedRouteRoute
   publicLoginRouteRoute: typeof publicLoginRouteRouteWithChildren
   publicIndexRoute: typeof publicIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/(protected)': {
+      id: '/(protected)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof protectedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(public)/': {
       id: '/(public)/'
       path: '/'
@@ -95,6 +114,7 @@ const publicLoginRouteRouteWithChildren =
   publicLoginRouteRoute._addFileChildren(publicLoginRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  protectedRouteRoute: protectedRouteRoute,
   publicLoginRouteRoute: publicLoginRouteRouteWithChildren,
   publicIndexRoute: publicIndexRoute,
 }
