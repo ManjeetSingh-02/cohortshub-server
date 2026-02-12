@@ -1,5 +1,6 @@
 import { authService } from '@/services/auth.service';
 import { create } from 'zustand';
+import { useUserStore } from './user.store';
 
 // create a store for authentication
 export const useAuthStore = create(set => ({
@@ -17,6 +18,7 @@ export const useAuthStore = create(set => ({
       // TODO: handle error (e.g., show a notification to the user)
     } finally {
       set({ accessToken: null });
+      useUserStore.getState().clearUserInfo();
     }
   },
 }));
