@@ -12,7 +12,7 @@ export async function restoreSession() {
     useAuthStore.getState().updateAccessToken(data.response.data.accessToken);
     return true;
   } catch (error) {
-    useAuthStore.getState().clearAccessToken();
+    useAuthStore.getState().logout(false);
     return false;
   }
 }

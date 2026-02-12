@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
     // prevent infinite loop of refreshing token if original request is for /token/refresh
     // prevent infinite loop of retrying original request if it was already retried once
     if (originalRequestConfig.url === '/auth/token/refresh' || originalRequestConfig._retry)
-      return clearAccessToken(error);
+      return forceLogout(error);
 
     // mark the request as retried
     originalRequestConfig._retry = true;
@@ -56,13 +56,13 @@ axiosInstance.interceptors.response.use(
       // resend the original request with the new access token
       return axiosInstance(originalRequestConfig);
     } catch (error) {
-      return clearAccessToken(error);
+      return forceLogout(error);
     }
   }
 );
 
-// sub-function to clear accessToken from authStore and reject the error
-function clearAccessToken(error) {
-  useAuthStore.getState().clearAccessToken();
+// sub-function to force logout the user
+async function forceLogout(error) {
+  await useAuthStore.getState().logout(false);
   return Promise.reject(error);
 }
