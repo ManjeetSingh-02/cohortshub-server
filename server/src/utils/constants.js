@@ -16,6 +16,7 @@ export const GOOGLE_OAUTH_CONFIG = {
   DEFAULT_SCOPES: 'openid email',
   SCOPE_GRANT_TYPE: 'authorization_code',
   VALID_ISSUERS: ['https://accounts.google.com', 'accounts.google.com'],
+  SUCCESS_REDIRECT_URI: `${envConfig.ORIGIN_URL}/cohorts`,
 };
 
 // export OAuthToken expiry duration(5 mins)

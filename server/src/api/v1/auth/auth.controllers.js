@@ -150,7 +150,7 @@ export const googleLoginCallback = asyncHandler(async (req, res) => {
   // redirect user to origin URL
   return res
     .cookie(REFRESH_TOKEN_COOKIE_CONFIG.NAME, refreshToken, REFRESH_TOKEN_COOKIE_CONFIG.OPTIONS)
-    .redirect(envConfig.ORIGIN_URL);
+    .redirect(GOOGLE_OAUTH_CONFIG.SUCCESS_REDIRECT_URI);
 });
 
 // @controller POST /logout
